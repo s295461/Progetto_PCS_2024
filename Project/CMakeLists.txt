@@ -40,41 +40,43 @@ list(APPEND DFN_LINKED_LIBRARIES PRIVATE GTest::gmock_main)
 ################################################################################
 
 add_subdirectory(src)
-list(APPEND DFN_SOURCES ${src_sources})
-list(APPEND DFN_HEADERS ${src_headers})
-list(APPEND DFN_INCLUDE ${src_includes})
+list(APPEND DFN_sources ${src_sources})
+list(APPEND DFN_headers ${src_headers})
+list(APPEND DFN_includes ${src_includes})
+
+# list(APPEND DFN_SOURCES ${DFN_sources})
+# list(APPEND DFN_HEADERS ${DFN_headers})
+# list(APPEND DFN_INCLUDE ${DFN_includes})
 
 add_subdirectory(src_test)
-list(APPEND DFN_TEST_SOURCES ${src_test_sources})
-list(APPEND DFN_TEST_HEADERS ${src_test_headers})
-list(APPEND DFN_TEST_INCLUDE ${src_test_includes})
+list(APPEND DFN_TEST_sources ${src_test_sources})
+list(APPEND DFN_TEST_headers ${src_test_headers})
+list(APPEND DFN_TEST_includes ${src_test_includes})
 
 add_subdirectory(TestingParaview/Code/src)
-list(APPEND DFN_SOURCES ${src_paraview_sources})
-list(APPEND DFN_HEADERS ${src_paraview_headers})
-list(APPEND DFN_INCLUDE ${src_paraview_includes})
+list(APPEND DFN_sources ${src_paraview_sources})
+list(APPEND DFN_headers ${src_paraview_headers})
+list(APPEND DFN_includes ${src_paraview_includes})
 
 
-list(APPEND DFN_SOURCES ${DFN_sources})
-list(APPEND DFN_HEADERS ${DFN_headers})
-list(APPEND DFN_INCLUDE ${DFN_includes})
+
 
 #Add file
 ################################################################################
-
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/DFN DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 # Create executable
 ################################################################################
-add_executable(${PROJECT_NAME} main.cpp ${DFN_SOURCES} ${DFN_HEADERS})
+add_executable(DFN main.cpp ${DFN_sources} ${DFN_headers})
 
-add_executable(${PROJECT_NAME}_TEST main_test.cpp ${DFN_SOURCES} ${DFN_HEADERS} ${DFN_TEST_SOURCES} ${DFN_TEST_HEADERS})
+add_executable(DFN_TEST main_test.cpp ${DFN_sources} ${DFN_headers} ${DFN_TEST_sources} ${DFN_TEST_headers})
 
 
-target_link_libraries(${PROJECT_NAME} ${DFN_LINKED_LIBRARIES})
-target_include_directories(${PROJECT_NAME} PRIVATE ${DFN_INCLUDE})
-target_compile_options(${PROJECT_NAME} PUBLIC -fPIC)
+target_link_libraries(DFN ${DFN_LINKED_LIBRARIES})
+target_include_directories(DFN PUBLIC ${DFN_includes})
+target_compile_options(DFN PUBLIC -fPIC)
 
-target_include_directories(${PROJECT_NAME}_TEST PRIVATE ${DFN_INCLUDE} ${DFN_TEST_INCLUDE})
-target_link_libraries(${PROJECT_NAME}_TEST ${DFN_LINKED_LIBRARIES})
-target_compile_options(${PROJECT_NAME}_TEST PRIVATE -fPIC)
+target_include_directories(DFN_TEST PUBLIC ${DFN_includes} ${DFN_TEST_includes})
+target_link_libraries(DFN_TEST ${DFN_LINKED_LIBRARIES})
+target_compile_options(DFN_TEST PUBLIC -fPIC)
 
