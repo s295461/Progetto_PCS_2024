@@ -12,8 +12,9 @@ using namespace FractureNetwork;
 
 int main()
 {
+    DiscreteFractureNetwork fracture;
     string filePath = "DFN";
-    ImportFracture(filePath);
+    ImportFracture(filePath, fracture);
 
 
 

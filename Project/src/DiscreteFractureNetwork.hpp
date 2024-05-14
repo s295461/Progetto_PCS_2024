@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 #include "Eigen/Eigen"
 
 using namespace std;
@@ -12,7 +13,8 @@ struct DiscreteFractureNetwork
 {
     unsigned int numFracture = 0;
     vector<unsigned int> fractureID = {};
-    vector<Vector2d> coordinates = {};
+    vector<unsigned int> NumVertices = {};
+    vector<vector<VectorXd>> vertices = {};
 
 
 
