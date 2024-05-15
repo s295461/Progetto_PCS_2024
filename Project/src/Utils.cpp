@@ -108,7 +108,6 @@ bool readFracture(const string& filePath, const string& fileName, DiscreteFractu
         for(unsigned int n = 0; n < fracture.NumVertices[i]; n++)
         {
             converterCoordX >> x[n];
-
         }
         listLines.pop_front(); // Elimino la riga delle x
 
@@ -117,7 +116,6 @@ bool readFracture(const string& filePath, const string& fileName, DiscreteFractu
         for(unsigned int n = 0; n < fracture.NumVertices[i]; n++)
         {
             converterCoordY >> y[n];
-
         }
         listLines.pop_front(); // Elimino la riga delle y
 
@@ -126,7 +124,6 @@ bool readFracture(const string& filePath, const string& fileName, DiscreteFractu
         for(unsigned int n = 0; n < fracture.NumVertices[i]; n++)
         {
             converterCoordZ >> z[n];
-
         }
         listLines.pop_front(); // Elimino la riga delle z
 
@@ -136,29 +133,27 @@ bool readFracture(const string& filePath, const string& fileName, DiscreteFractu
             cout << scientific << setprecision(16) << "Vertices " << n+1 << ": x: " << x[n] << "; y: " << y[n] << "; z: " << z[n] << endl;
         }
 
-        // Salvo in memoria i verici
-        vector<VectorXd> coord;
-        coord.push_back(x);
-        coord.push_back(y);
-        coord.push_back(z);
-        fracture.vertices.push_back(coord);
+        // Salvo in una matrice le coordinate dei vertici della frattura
+        MatrixXd verticesFracture(3,fracture.NumVertices[i]);
+        for(unsigned int n = 0; n < fracture.NumVertices[i]; n++)
+        {
+            verticesFracture(0, n) = x[n];
+            verticesFracture(1, n) = y[n];
+            verticesFracture(2, n) = z[n];
+        }
 
-        // Salvarli in una matrice??
-
-        // cout << fracture.vertices << endl;
-
-        //cout << scientific << setprecision(16) << x[0] << " " << x[1] << " " << x[2] << " " << x[3] << endl;
-        //cout << scientific << setprecision(16) << y[0] << " " << y[1] << " " << y[2] << " " << y[3] << endl;
-        //cout << scientific << setprecision(16) << z[0] << " " << z[1] << " " << z[2] << " " << z[3] << endl;
-
+        // Salvo la matrice di coordinate in un vettore di matrici
+        fracture.vertices.push_back(verticesFracture);
     }
 
+    // Chiudo il file__
     file.close();
     return true;
 
 }
 
+//bool esisteIntersezione(fracture1, fracture2)
 
-
+// if(!esisteIntersezione)
 
 }

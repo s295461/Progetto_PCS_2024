@@ -14,7 +14,7 @@ struct DiscreteFractureNetwork
     unsigned int numFracture = 0;
     vector<unsigned int> fractureID = {};
     vector<unsigned int> NumVertices = {};
-    vector<vector<VectorXd>> vertices = {};
+    vector<MatrixXd> vertices;
 
 
 
