@@ -15,12 +15,12 @@ struct DiscreteFractureNetwork
     vector<unsigned int> fractureID = {};
     vector<unsigned int> NumVertices = {};
     vector<MatrixXd> vertices;
-
-
-
 };
 
-
+struct Vec3d
+{
+    double x, y, z;
+};
 
 
 }
