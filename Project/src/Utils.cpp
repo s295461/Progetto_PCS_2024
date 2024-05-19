@@ -187,9 +187,11 @@ bool PlaneIntersection(const DiscreteFractureNetwork fracture)
 
             if(n == 0)
             {
+                // Seleziono due fratture
                 unsigned int Id1 = fracture.fractureID[i];
                 unsigned int Id2 = fracture.fractureID[j];
-                cout << "ID2: " << Id2 << endl;
+
+                // Prendo i vertici di tre punti per ogni frattura
                 Vec3d P;
                 P.x = fracture.vertices[Id1](0,0);
                 P.y = fracture.vertices[Id1](1,0);
@@ -214,63 +216,53 @@ bool PlaneIntersection(const DiscreteFractureNetwork fracture)
                 C.x = fracture.vertices[Id2](0,2);
                 C.y = fracture.vertices[Id2](1,2);
                 C.z = fracture.vertices[Id2](2,2);
-                cout << "P: " << P.x << ", R: " << R.x << endl;
-                cout << "Q: " << Q.x << ", R: " << R.x << endl;
+
+                // Calcolo i vettori
                 Vec3d u1;
                 u1.x = P.x - R.x;
                 u1.y = P.y - R.y;
                 u1.z = P.z - R.z;
-                cout << "u1: " << u1.x << endl;
 
                 Vec3d v1;
                 v1.x = Q.x - R.x;
                 v1.y = Q.y - R.y;
                 v1.z = Q.z - R.z;
-                cout << "v1: " << v1.x << endl;
 
-                cout << "A: " << A.x << ", C: " << C.x << endl;
-                cout << "B: " << B.x << ", C: " << C.x << endl;
                 Vec3d u2;
                 u2.x = A.x - C.x;
                 u2.y = A.y - C.y;
                 u2.z = A.z - C.z;
-                cout << "u2: " << u2.x << endl;
 
                 Vec3d v2;
                 v2.x = B.x - C.x;
                 v2.y = B.y - C.y;
                 v2.z = B.z - C.z;
-                cout << "v2: " << v2.x << endl;
 
+                // Calcolo le normali ai due piani
                 Vec3d n1;
                 n1.x = crossProduct(u1, v1).x / (norm2(u1) * norm2(v1));
                 n1.y = crossProduct(u1, v1).y / (norm2(u1) * norm2(v1));
                 n1.z = crossProduct(u1, v1).z / (norm2(u1) * norm2(v1));
-                cout << "n1.x: " << n1.x << endl;
-                cout << "n1.y: " << n1.y << endl;
-                cout << "n1.z: " << n1.z << endl;
 
                 Vec3d n2;
                 n2.x = crossProduct(u2, v2).x / (norm2(u2) * norm2(v2));
                 n2.y = crossProduct(u2, v2).y / (norm2(u2) * norm2(v2));
                 n2.z = crossProduct(u2, v2).z / (norm2(u2) * norm2(v2));
-                cout << "n2.x: " << n2.x << endl;
-                cout << "n2.y: " << n2.y << endl;
-                cout << "n2.z: " << n2.z << endl;
 
-                Vec3d t;
-                t.x = crossProduct(n1, n2).x;
-                t.y = crossProduct(n1, n2).y;
-                t.z = crossProduct(n1, n2).z;
+                // Calcolo il vettore direzione della retta di intersezione
+                Vec3d s;
+                s.x = crossProduct(n1, n2).x;
+                s.y = crossProduct(n1, n2).y;
+                s.z = crossProduct(n1, n2).z;
 
+                // Calcolo il termine noto
                 double d1;
                 d1 = n1.x * R.x + n1.y * R.y + n2.z * R.z;
-                cout << "d1: " << d1 << endl;
 
                 double d2;
                 d2 = n2.x * C.x + n2.y * C.y + n2.z * C.z;
-                cout << "d2: " << d2 << endl;
 
+                // Inserisco i coefficienti del sistema formato dai due piani ricavati dalle fratture e dal piano con normale s in una matrice
                 MatrixXd coeff(3, 3);
                 coeff(0,0) = n1.x;
                 coeff(0,1) = n1.y;
@@ -278,17 +270,25 @@ bool PlaneIntersection(const DiscreteFractureNetwork fracture)
                 coeff(1,0) = n2.x;
                 coeff(1,1) = n2.y;
                 coeff(1,2) = n2.z;
-                coeff(2,0) = t.x;
-                coeff(2,1) = t.y;
-                coeff(2,2) = t.z;
+                coeff(2,0) = s.x;
+                coeff(2,1) = s.y;
+                coeff(2,2) = s.z;
 
+                // Creo il vettore dei termini noti
                 Vector3d term;
                 term(0) = d1;
                 term(1) = d2;
                 term(2) = 0;
 
-                Vector3d solution;
-                solution = coeff.partialPivLu().solve(term);
+                // Risolvo il sistema e ottengo il punto Point
+                Vector3d point;
+                point = coeff.partialPivLu().solve(term);
+                Vec3d Point;
+                Point.x = point[0];
+                Point.y = point[1];
+                Point.z = point[2];
+
+                // Dal vettore s e dal punto Point posso ricavare la forma parametrica della retta
 
             }
 
@@ -299,8 +299,5 @@ bool PlaneIntersection(const DiscreteFractureNetwork fracture)
     return true;
 }
 
-//bool esisteIntersezione(fracture1, fracture2)
-
-// if(!esisteIntersezione)
 
 }
