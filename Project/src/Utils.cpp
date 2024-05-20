@@ -176,16 +176,9 @@ bool PlaneIntersection(const DiscreteFractureNetwork fracture)
 
     for(unsigned int i = 0; i < fracture.numFracture; i++)
     {
-        unsigned int n = 0;
         for(unsigned int j = 0; j < fracture.numFracture; j++)
         {
-            n = 0;
-            if( i == j)
-            {
-                n++;
-            }
-
-            if(n == 0)
+            if(i < j)
             {
                 // Seleziono due fratture
                 unsigned int Id1 = fracture.fractureID[i];
