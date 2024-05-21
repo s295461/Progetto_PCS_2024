@@ -178,7 +178,7 @@ bool PlaneIntersection(const DiscreteFractureNetwork fracture)
     {
         for(unsigned int j = 0; j < fracture.numFracture; j++)
         {
-            if(i < j)
+            if(i != j)
             {
                 // Seleziono due fratture
                 unsigned int Id1 = fracture.fractureID[i];
@@ -275,7 +275,8 @@ bool PlaneIntersection(const DiscreteFractureNetwork fracture)
 
                 // Risolvo il sistema e ottengo il punto Point
                 Vector3d point;
-                point = coeff.partialPivLu().solve(term);
+                point = coeff.inverse() * term;
+
                 Vec3d Point;
                 Point.x = point[0];
                 Point.y = point[1];
