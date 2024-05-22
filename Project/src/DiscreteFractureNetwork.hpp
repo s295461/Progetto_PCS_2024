@@ -17,10 +17,10 @@ struct DiscreteFractureNetwork
     vector<MatrixXd> vertices;
 };
 
-struct Vec3d
-{
-    double x, y, z;
-};
+// struct Vec3d
+// {
+//     double x, y, z;
+// };
 
 
 }

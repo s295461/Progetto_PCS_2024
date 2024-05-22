@@ -153,22 +153,28 @@ bool readFracture(const string& filePath, const string& fileName, DiscreteFractu
 
 
 // Funzione che calcola il prodotto vettoriale
-Vec3d crossProduct(const Vec3d& a, const Vec3d& b)
-{
-    Vec3d result;
-    result.x = a.y * b.z - a.z * b.y;
-    result.y = a.z * b.x - a.x * b.z;
-    result.z = a.x * b.y - a.y * b.x;
-    return result;
-}
+// Vec3d crossProduct(const Vec3d& a, const Vec3d& b)
+// {
+//     Vec3d result;
+//     result.x = a.y * b.z - a.z * b.y;
+//     result.y = a.z * b.x - a.x * b.z;
+//     result.z = a.x * b.y - a.y * b.x;
+//     return result;
+// }
 
 
 // Funzione che calcola la norma 2 di un vettore
-double norm2(const Vec3d& a)
-{
-    return sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
-}
+// double norm2(const Vec3d& a)
+// {
+//     return sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
+// }
 
+
+// Funzione che trova le tracce
+//bool findTraces(const Vec3d s, const Vec3d Point, const DiscreteFractureNetwork& fracture, unsigned int Id1, unsigned int Id2)
+//{
+
+//}
 
 // Questa funzione calcola l'intersezione tra due piani creati da due fratture
 bool PlaneIntersection(const DiscreteFractureNetwork fracture)
@@ -185,87 +191,88 @@ bool PlaneIntersection(const DiscreteFractureNetwork fracture)
                 unsigned int Id2 = fracture.fractureID[j];
 
                 // Prendo i vertici di tre punti per ogni frattura
-                Vec3d P;
-                P.x = fracture.vertices[Id1](0,0);
-                P.y = fracture.vertices[Id1](1,0);
-                P.z = fracture.vertices[Id1](2,0);
-                Vec3d Q;
-                Q.x = fracture.vertices[Id1](0,1);
-                Q.y = fracture.vertices[Id1](1,1);
-                Q.z = fracture.vertices[Id1](2,1);
-                Vec3d R;
-                R.x = fracture.vertices[Id1](0,2);
-                R.y = fracture.vertices[Id1](1,2);
-                R.z = fracture.vertices[Id1](2,2);
-                Vec3d A;
-                A.x = fracture.vertices[Id2](0,0);
-                A.y = fracture.vertices[Id2](1,0);
-                A.z = fracture.vertices[Id2](2,0);
-                Vec3d B;
-                B.x = fracture.vertices[Id2](0,1);
-                B.y = fracture.vertices[Id2](1,1);
-                B.z = fracture.vertices[Id2](2,1);
-                Vec3d C;
-                C.x = fracture.vertices[Id2](0,2);
-                C.y = fracture.vertices[Id2](1,2);
-                C.z = fracture.vertices[Id2](2,2);
+                // Vec3d P;
+                // P.x = fracture.vertices[Id1](0,0);
+                // P.y = fracture.vertices[Id1](1,0);
+                // P.z = fracture.vertices[Id1](2,0);
+                // Vec3d Q;
+                // Q.x = fracture.vertices[Id1](0,1);
+                // Q.y = fracture.vertices[Id1](1,1);
+                // Q.z = fracture.vertices[Id1](2,1);
+                // Vec3d R;
+                // R.x = fracture.vertices[Id1](0,2);
+                // R.y = fracture.vertices[Id1](1,2);
+                // R.z = fracture.vertices[Id1](2,2);
+                // Vec3d A;
+                // A.x = fracture.vertices[Id2](0,0);
+                // A.y = fracture.vertices[Id2](1,0);
+                // A.z = fracture.vertices[Id2](2,0);
+                // Vec3d B;
+                // B.x = fracture.vertices[Id2](0,1);
+                // B.y = fracture.vertices[Id2](1,1);
+                // B.z = fracture.vertices[Id2](2,1);
+                // Vec3d C;
+                // C.x = fracture.vertices[Id2](0,2);
+                // C.y = fracture.vertices[Id2](1,2);
+                // C.z = fracture.vertices[Id2](2,2);
 
                 // Calcolo i vettori
-                Vec3d u1;
-                u1.x = P.x - R.x;
-                u1.y = P.y - R.y;
-                u1.z = P.z - R.z;
+                Vector3d u1;
+                u1(0) = fracture.vertices[Id1](0,0) - fracture.vertices[Id1](0,2);
+                u1(1) = fracture.vertices[Id1](1,0) - fracture.vertices[Id1](1,2);
+                u1(2) = fracture.vertices[Id1](2,0) - fracture.vertices[Id1](2,2);
 
-                Vec3d v1;
-                v1.x = Q.x - R.x;
-                v1.y = Q.y - R.y;
-                v1.z = Q.z - R.z;
+                Vector3d v1;
+                v1(0) = fracture.vertices[Id1](0,1) - fracture.vertices[Id1](0,2);
+                v1(1) = fracture.vertices[Id1](1,1) - fracture.vertices[Id1](1,2);
+                v1(2) = fracture.vertices[Id1](2,1) - fracture.vertices[Id1](2,2);
 
-                Vec3d u2;
-                u2.x = A.x - C.x;
-                u2.y = A.y - C.y;
-                u2.z = A.z - C.z;
+                Vector3d u2;
+                u2(0) = fracture.vertices[Id2](0,0) - fracture.vertices[Id2](0,2);
+                u2(1) = fracture.vertices[Id2](1,0) - fracture.vertices[Id2](1,2);
+                u2(2) = fracture.vertices[Id2](2,0) - fracture.vertices[Id2](2,2);
 
-                Vec3d v2;
-                v2.x = B.x - C.x;
-                v2.y = B.y - C.y;
-                v2.z = B.z - C.z;
+                Vector3d v2;
+                v2(0) = fracture.vertices[Id2](0,1) - fracture.vertices[Id2](0,2);
+                v2(1) = fracture.vertices[Id2](1,1) - fracture.vertices[Id2](1,2);
+                v2(2) = fracture.vertices[Id2](2,1) - fracture.vertices[Id2](2,2);
 
                 // Calcolo le normali ai due piani
-                Vec3d n1;
-                n1.x = crossProduct(u1, v1).x / (norm2(u1) * norm2(v1));
-                n1.y = crossProduct(u1, v1).y / (norm2(u1) * norm2(v1));
-                n1.z = crossProduct(u1, v1).z / (norm2(u1) * norm2(v1));
+                Vector3d n1 = u1.cross(v1) / (u1.norm() * v1.norm());
+                //n1(0) = crossProduct(u1, v1).x / (norm2(u1) * norm2(v1));
+                //n1(1) = crossProduct(u1, v1).y / (norm2(u1) * norm2(v1));
+                //n1(2) = crossProduct(u1, v1).z / (norm2(u1) * norm2(v1));
 
-                Vec3d n2;
-                n2.x = crossProduct(u2, v2).x / (norm2(u2) * norm2(v2));
-                n2.y = crossProduct(u2, v2).y / (norm2(u2) * norm2(v2));
-                n2.z = crossProduct(u2, v2).z / (norm2(u2) * norm2(v2));
+                Vector3d n2 = u2.cross(v2) / (u2.norm() * v2.norm());
+                // n2(0) = u2.cross(v2).x / (norm2(u2) * norm2(v2));
+                // n2(1) = crossProduct(u2, v2).y / (norm2(u2) * norm2(v2));
+                // n2(2) = crossProduct(u2, v2).z / (norm2(u2) * norm2(v2));
 
                 // Calcolo il vettore direzione della retta di intersezione
-                Vec3d s;
-                s.x = crossProduct(n1, n2).x;
-                s.y = crossProduct(n1, n2).y;
-                s.z = crossProduct(n1, n2).z;
+                Vector3d s = n1.cross(n2);
+                //s.x = crossProduct(n1, n2).x;
+                //s.y = crossProduct(n1, n2).y;
+                //s.z = crossProduct(n1, n2).z;
 
                 // Calcolo il termine noto
                 double d1;
-                d1 = n1.x * R.x + n1.y * R.y + n2.z * R.z;
+                d1 = n1(0) * fracture.vertices[Id1](0,2) + n1(1) * fracture.vertices[Id1](1,2) + n1(2) * fracture.vertices[Id1](2,2);
 
                 double d2;
-                d2 = n2.x * C.x + n2.y * C.y + n2.z * C.z;
+                d2 = n2(0) * fracture.vertices[Id2](0,2) + n2(1) * fracture.vertices[Id2](1,2) + n2(2) * fracture.vertices[Id2](2,2);
 
                 // Inserisco i coefficienti del sistema formato dai due piani ricavati dalle fratture e dal piano con normale s in una matrice
-                MatrixXd coeff(3, 3);
-                coeff(0,0) = n1.x;
-                coeff(0,1) = n1.y;
-                coeff(0,2) = n1.z;
-                coeff(1,0) = n2.x;
-                coeff(1,1) = n2.y;
-                coeff(1,2) = n2.z;
-                coeff(2,0) = s.x;
-                coeff(2,1) = s.y;
-                coeff(2,2) = s.z;
+                Matrix3d coeff;
+                coeff << n1, n2, s;
+                coeff(0,0) = n1(0);
+                coeff(0,1) = n1(1);
+                coeff(0,2) = n1(2);
+                coeff(1,0) = n2(0);
+                coeff(1,1) = n2(1);
+                coeff(1,2) = n2(2);
+                coeff(2,0) = s(0);
+                coeff(2,1) = s(1);
+                coeff(2,2) = s(2);
 
                 // Creo il vettore dei termini noti
                 Vector3d term;
@@ -277,17 +284,117 @@ bool PlaneIntersection(const DiscreteFractureNetwork fracture)
                 Vector3d point;
                 point = coeff.inverse() * term;
 
-                Vec3d Point;
-                Point.x = point[0];
-                Point.y = point[1];
-                Point.z = point[2];
+                // Vec3d Point;
+                // Point.x = point[0];
+                // Point.y = point[1];
+                // Point.z = point[2];
 
                 // Dal vettore s e dal punto Point posso ricavare la forma parametrica della retta
 
+
+
+                // findTraces(s, Point, fracture, Id1, Id2);
+
+                // Ciclo su tutti i vertici della prima frattura
+                for(unsigned int n = 0; n < fracture.NumVertices[Id1]; n++)
+                {
+                    // Prima tratto il caso generale in cui collego un vertice con il successivo
+                    if(n != fracture.NumVertices[Id1] - 1)
+                    {
+                        Vector3d v;
+                        v(0) = fracture.vertices[Id1](0,n) - fracture.vertices[Id1](0,n+1);
+                        v(1) = fracture.vertices[Id1](1,n) - fracture.vertices[Id1](1,n+1);
+                        v(2) = fracture.vertices[Id1](2,n) - fracture.vertices[Id1](2,n+1);
+
+                        Vector3d vec = s.cross(v);
+
+                        Matrix3d A;
+                        A << s, -v, vec;
+
+                        Vector3d b;
+                        b(0) = fracture.vertices[Id1](0,n) - point(0);
+                        b(1) = fracture.vertices[Id1](1,n) - point(1);
+                        b(2) = fracture.vertices[Id1](2,n) - point(2);
+
+                        Vector3d sol;
+                        sol = A.inverse() * b;
+
+                        double t = sol(0);
+                        double u = sol(1);
+
+                        Vector3d intersection = point + t * s;
+
+                        Vector3d point1;
+                        point1 << fracture.vertices[Id1](0,n), fracture.vertices[Id1](1,n), fracture.vertices[Id1](2,n);
+                        Vector3d verify = point1 + u * v;
+
+                        double tol = 10e-16;
+
+                        if((intersection - verify).norm() < tol)
+                        {
+                            cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
+                            cout << "Vertices: " << n << ", " << n+1 << endl;
+                            cout << "Intersection: " << endl;
+                            for(unsigned int i = 0; i < 3; i++)
+                                cout << intersection(i) << endl;
+                        }
+                        else
+                        {
+                            cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
+                            cout << "Vertices: " << n << ", " << n+1 << endl;
+                            cout << "Non si intersecano" << endl;
+                        }
+                    }
+
+                    // Poi tratto il caso particolare del segmento formato dall'ultimo vertice con il primo
+                    else
+                    {
+                        Vector3d v;
+                        v(0) = fracture.vertices[Id1](0,n) - fracture.vertices[Id1](0,0);
+                        v(1) = fracture.vertices[Id1](1,n) - fracture.vertices[Id1](1,0);
+                        v(2) = fracture.vertices[Id1](2,n) - fracture.vertices[Id1](2,0);
+
+                        Vector3d vec = s.cross(v);
+
+                        Matrix3d A;
+                        A << s, -v, vec;
+
+                        Vector3d b;
+                        b(0) = fracture.vertices[Id1](0,n) - point(0);
+                        b(1) = fracture.vertices[Id1](1,n) - point(1);
+                        b(2) = fracture.vertices[Id1](2,n) - point(2);
+
+                        Vector3d sol;
+                        sol = A.inverse() * b;
+
+                        double t = sol(0);
+                        double u = sol(1);
+
+                        Vector3d intersection = point + t * s;
+
+                        Vector3d point1;
+                        point1 << fracture.vertices[Id1](0,n), fracture.vertices[Id1](1,n), fracture.vertices[Id1](2,n);
+                        Vector3d verify = point1 + u * v;
+
+                        double tol = 10e-16;
+
+                        if((intersection - verify).norm() < tol)
+                        {
+                            cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
+                            cout << "Vertices: " << n << ", " << 0 << endl;
+                            cout << "Intersection: " << endl;
+                            for(unsigned int i = 0; i < 3; i++)
+                                cout << intersection(i) << endl;
+                        }
+                        else
+                        {
+                            cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
+                            cout << "Vertices: " << n << ", " << 0 << endl;
+                            cout << "Non si intersecano" << endl;
+                        }
+                    }
+                }
             }
-
-
-
         }
     }
     return true;
