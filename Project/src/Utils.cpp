@@ -298,6 +298,7 @@ bool PlaneIntersection(const DiscreteFractureNetwork fracture)
                 // Ciclo su tutti i vertici della prima frattura
                 for(unsigned int n = 0; n < fracture.NumVertices[Id1]; n++)
                 {
+
                     // Prima tratto il caso generale in cui collego un vertice con il successivo
                     if(n != fracture.NumVertices[Id1] - 1)
                     {
