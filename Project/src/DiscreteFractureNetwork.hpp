@@ -22,5 +22,12 @@ struct DiscreteFractureNetwork
 //     double x, y, z;
 // };
 
-
+struct BoundingBox {
+    Vector3d min;
+    Vector3d max;
+};
+struct FractureBBox{
+    BoundingBox bbox;
+    unsigned int fractureID;
+};
 }
