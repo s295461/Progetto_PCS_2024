@@ -14,7 +14,16 @@ struct DiscreteFractureNetwork
     unsigned int numFracture = 0;
     vector<unsigned int> fractureID = {};
     vector<unsigned int> NumVertices = {};
-    vector<MatrixXd> vertices;
+    vector<MatrixXd> vertices = {};
+};
+
+
+struct Traces
+{
+    unsigned int numTraces = 0;
+    vector<unsigned int> traceId = {};
+    vector<Vector2i> fractureId = {};
+    vector<MatrixXd> coordinates = {};
 };
 
 struct BoundingBox {
@@ -25,6 +34,7 @@ struct FractureBBox{
     BoundingBox bbox;
     unsigned int fractureID;
 };
+
 
 struct Traces
 {

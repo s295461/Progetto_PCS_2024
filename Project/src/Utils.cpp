@@ -26,6 +26,9 @@ bool ImportFracture(const string& filePath, DiscreteFractureNetwork& fracture, T
       //  cout << trace.traceId[i] << endl;
 
 
+    PlaneIntersection(fracture, trace);
+
+
     //cout << endl;
     //cout << "FR10_data" << endl;
     //string fileNameFR10 = "/FR10_data.txt";
@@ -170,6 +173,7 @@ BoundingBox BBox3D(const MatrixXd& vertices) {
         bbox.max = bbox.max.cwiseMax(vertices.col(i));
     }
 
+
     return bbox;
 }
 // Questa funzione calcola l'intersezione tra due piani creati da due fratture
@@ -187,6 +191,7 @@ bool FractureIntersection(const DiscreteFractureNetwork fracture, Traces trace)
         for(unsigned int j = 0; j < fracture.numFracture; j++)
         {
             if(i < j)
+
             {   bool intersezione = !(BBoxVect[i].bbox.min.x() > BBoxVect[j].bbox.max.x() ||
                                       BBoxVect[i].bbox.min.y() > BBoxVect[j].bbox.max.y() ||
                                       BBoxVect[i].bbox.min.z() > BBoxVect[j].bbox.max.z() ||
@@ -199,6 +204,8 @@ bool FractureIntersection(const DiscreteFractureNetwork fracture, Traces trace)
                 // Seleziono due fratture
                 unsigned int Id1 = BBoxVect[i].fractureID;
                 unsigned int Id2 = BBoxVect[j].fractureID;
+
+
 
                 /// BOUNDING BOX
                 // if(bounding box = True)
@@ -238,13 +245,153 @@ bool FractureIntersection(const DiscreteFractureNetwork fracture, Traces trace)
                 Vector3d point;
                 point = coeff.transpose().inverse() * term;
 
-                // Chiamo ora la funzione findTraces che trova la traccia tra la frattura con Id1 e la frattura con Id2.
+
+                // Dal vettore s e dal punto Point posso ricavare la forma parametrica della retta
+
+
+
                 findTraces(s, point, fracture, Id1, Id2, trace);
+
+                // Ciclo su tutti i vertici della prima frattura
+                // for(unsigned int n = 0; n < fracture.NumVertices[Id1]; n++)
+                // {
+                //     // Ciclo su tutti i vertici della seconda frattura
+                //     for(unsigned int m = 0; m < fracture.NumVertices[Id2]; m++)
+                //     {
+                //         unsigned int k = (n+1) % fracture.NumVertices[Id1];
+                //         unsigned int h = (m+1) % fracture.NumVertices[Id2];
+
+                //         Vector3d v1;
+                //         v1 = fracture.vertices[Id1].col(n) - fracture.vertices[Id1].col(k);
+                //         Vector3d P1;
+                //         P1 = fracture.vertices[Id1].col(k);
+
+                //         Vector3d v2;
+                //         v2 = fracture.vertices[Id2].col(m) - fracture.vertices[Id2].col(h);
+                //         Vector3d P2;
+                //         P2 = fracture.vertices[Id2].col(h);
+
+                //         // Verifico che le rette non siano parallele alla retta di intersezione tra i piani
+                //         if((v1.cross(s)).norm() != 0 && (v2.cross(s)).norm() != 0)
+                //         {
+                //             double t1;
+                //             double u1;
+                //             t1 = ((P1.cross(v1) - point.cross(v1)).dot(s.cross(v1))) / (((s.cross(v1)).norm())*((s.cross(v1)).norm()));
+                //             u1 = ((point.cross(s) - P1.cross(s)).dot(v1.cross(s))) / (((v1.cross(s)).norm())*((v1.cross(s)).norm()));
+
+                //             double t2;
+                //             double u2;
+                //             t2 = ((P2.cross(v2) - point.cross(v2)).dot(s.cross(v2))) / (((s.cross(v2)).norm())*((s.cross(v2)).norm()));
+                //             u2 = ((point.cross(s) - P2.cross(s)).dot(v2.cross(s))) / (((v2.cross(s)).norm())*((v2.cross(s)).norm()));
+
+                //             Vector3d intersection1 = P1 + u1 * v1;
+                //             Vector3d verify1 = point + t1 * s;
+
+                //             Vector3d intersection2 = P2 + u2 * v2;
+                //             Vector3d verify2 = point + t2 * s;
+
+                //             double tol = 1e-16;
+
+                //             if((intersection1 - verify1).norm() < tol && u1 >= 0 && u1 <= 1)
+                //             {
+                //                 cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
+                //                 cout << "Vertices: " << n << ", " << k << endl;
+                //                 cout << "Intersection: " << endl;
+                //                 for(unsigned int i = 0; i < 3; i++)
+                //                     cout << intersection1(i) << endl;
+                //             }
+                //             else
+                //             {
+                //                 cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
+                //                 cout << "Vertices: " << n << ", " << k << endl;
+                //                 cout << "Non si intersecano" << endl;
+                //             }
+
+                //             if((intersection2 - verify2).norm() < tol && u2 >= 0 && u2 <= 1)
+                //             {
+                //                 cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
+                //                 cout << "Vertices: " << n << ", " << k << endl;
+                //                 cout << "Intersection: " << endl;
+                //                 for(unsigned int i = 0; i < 3; i++)
+                //                     cout << intersection2(i) << endl;
+                //             }
+                //             else
+                //             {
+                //                 cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
+                //                 cout << "Vertices: " << n << ", " << k << endl;
+                //                 cout << "Non si intersecano" << endl;
+                //             }
+
+                //         }
+                //         else
+                //         {
+                //             cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
+                //             cout << "Vertices: " << n << ", " << k << endl;
+                //             cout << "Sono parallele, non si intersecano" << endl;
+                //         }
+
+                //     }
+
+
+
+
+
+                        // MatrixXd A(3,2);
+                        // A(0,0) = s(0);
+                        // A(1,0) = s(1);
+                        // A(2,0) = s(2);
+                        // A(0,1) = v(0);
+                        // A(1,1) = v(1);
+                        // A(2,1) = v(2);
+
+                        // Vector3d b;
+                        // b(0) = fracture.vertices[Id1](0,k) - point(0);
+                        // b(1) = fracture.vertices[Id1](1,k) - point(1);
+                        // b(2) = fracture.vertices[Id1](2,k) - point(2);
+
+                        // Vector2d sol;
+                        // // // sol = A.inverse() * b;
+                        // sol = A.partialPivLu().solve(b);
+
+                        // double t = sol(0);
+                        // double u = sol(1);
+
+
+
+
+
+                    //Vector3d vec = s.cross(v);
+
+                    // MatrixXd A(3,2);
+                    // A(0,0) = s(0);
+                    // A(1,0) = s(1);
+                    // A(2,0) = s(2);
+                    // A(0,1) = v(0);
+                    // A(1,1) = v(1);
+                    // A(2,1) = v(2);
+
+                    // Vector3d b;
+                    // b(0) = fracture.vertices[Id1](0,k) - point(0);
+                    // b(1) = fracture.vertices[Id1](1,k) - point(1);
+                    // b(2) = fracture.vertices[Id1](2,k) - point(2);
+
+                    // Vector2d sol;
+                    // // sol = A.inverse() * b;
+                    // sol = A.fullPivLu().solve(b);
+
+                    // double t = sol(0);
+                    // double u = sol(1);
+
+                    // Vector3d point1;
+                    // point1 << fracture.vertices[Id1](0,n), fracture.vertices[Id1](1,n), fracture.vertices[Id1](2,n);
+                }
+
             }
         }
-    }
+    // }
     return true;
 }
+
 
 
 // Funzione che confronta due punti per ordinamento
@@ -311,18 +458,20 @@ bool findTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
             Vector3d intersection2 = point + t2 * s;
             Vector3d verify2 = P2 + u2 * v2;
 
-            // Se il punto di intersezione coincide con il punto di verifica, allora è corretto
+
+
             if((intersection1 - verify1).norm() < tol && u1 >= 0 && u1 <= 1)
             {
                 cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
                 cout << "Vertices_1: " << n << ", " << k << endl;
                 cout << "Intersection_1: " << endl;
                 for(unsigned int i = 0; i < 3; i++)
-                    cout << intersection1(i) << endl;
+
+                cout << intersection1(i) << endl;
 
                 Point1.push_back(intersection1);
             }
-            // Se i punti non coincidono non si intersecano
+
             else
             {
                 cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
@@ -354,10 +503,12 @@ bool findTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
             cout << "Sono parallele, non si intersecano" << endl;
         }
 
-        // Passo ai due segmenti successivi
+
+
         n++;
         m++;
     }
+
 
     // Dopo aver girato su tutti i lati delle fratture ottengo un vettore di 4 punti, due saranno dati dall'intersezione della retta risultante dall'intersezione
     // tra i piani con la frattura Id1 e gli altri due dall'intersezione della retta con la frattura Id2.
@@ -431,6 +582,7 @@ bool findTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
     }
 
     return true;
+
 }
 
 
