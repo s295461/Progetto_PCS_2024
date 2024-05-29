@@ -26,6 +26,21 @@ struct Traces
     vector<MatrixXd> coordinates = {};
 };
 
+struct BoundingBox {
+    Vector3d min;
+    Vector3d max;
+};
+struct FractureBBox{
+    BoundingBox bbox;
+    unsigned int fractureID;
+};
 
 
+struct Traces
+{
+    unsigned int numTraces = 0;
+    vector<unsigned int> traceId = {};
+    vector<Vector2i> fractureId = {};
+    vector<MatrixXd> coordinates = {};
+};
 }
