@@ -7,18 +7,17 @@ using namespace std;
 
 namespace FractureNetwork {
 
-bool ImportFracture(const string& filePath, DiscreteFractureNetwork& fracture);
+bool ImportFracture(const string& filePath, DiscreteFractureNetwork& fracture, Traces trace);
 
 bool readFracture(const string& filePath, const string& fileName, DiscreteFractureNetwork& fracture);
 
-// Vec3d crossProduct(const Vec3d& a, const Vec3d& b);
+bool FractureIntersection(const DiscreteFractureNetwork fracture, Traces trace);
 
-// double norm2(const Vec3d& a);
+bool compare(Vector3d a, Vector3d b);
 
-// bool findTraces(const Vec3d s, const Vec3d Point, const DiscreteFractureNetwork& fracture, unsigned int Id1, unsigned int Id2);
+bool isBetween(Vector3d a, Vector3d b, Vector3d c);
 
-bool PlaneIntersection(const DiscreteFractureNetwork fracture);
-
+bool findTraces(const Vector3d s, const Vector3d Point, const DiscreteFractureNetwork& fracture, unsigned int Id1, unsigned int Id2, Traces trace);
 
 
 }

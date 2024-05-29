@@ -22,5 +22,16 @@ struct DiscreteFractureNetwork
 //     double x, y, z;
 // };
 
+struct Traces
+{
+    unsigned int numTraces = 0;
+    vector<unsigned int> traceId = {};
+    vector<Vector2i> fractureId = {};
+    vector<MatrixXd> coordinates = {};
+};
+
 
 }
+
+
+//metterci dentro ID --> ottengo la matrice dei vertici
