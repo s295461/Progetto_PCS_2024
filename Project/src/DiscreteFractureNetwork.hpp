@@ -17,11 +17,6 @@ struct DiscreteFractureNetwork
     vector<MatrixXd> vertices;
 };
 
-// struct Vec3d
-// {
-//     double x, y, z;
-// };
-
 struct BoundingBox {
     Vector3d min;
     Vector3d max;
@@ -29,5 +24,13 @@ struct BoundingBox {
 struct FractureBBox{
     BoundingBox bbox;
     unsigned int fractureID;
+};
+
+struct Traces
+{
+    unsigned int numTraces = 0;
+    vector<unsigned int> traceId = {};
+    vector<Vector2i> fractureId = {};
+    vector<MatrixXd> coordinates = {};
 };
 }

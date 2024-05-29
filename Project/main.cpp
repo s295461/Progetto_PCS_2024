@@ -104,8 +104,9 @@ using namespace FractureNetwork;
 int main()
 {
     DiscreteFractureNetwork fracture;
+    Traces trace;
     string filePath = "DFN";
-    if(!ImportFracture(filePath, fracture))
+    if(!ImportFracture(filePath, fracture,trace))
         return 1;
 
 
