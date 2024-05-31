@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <cmath>
 #include <algorithm>
 
 using namespace std;
@@ -30,6 +31,19 @@ bool ImportFracture(const string& filePathInput, const string filePathOutput, Di
     if(!PrintOnFile(outputFileNameFR3, filePathOutput, trace))
     {
         cerr << "Something wrong while printing the result in a file" << endl;
+        return false;
+    }
+
+    if(!TraceReorder(fracture, trace, filePathOutput))
+    {
+        cerr << "Something wrong while reordering traces" << endl;
+        return false;
+    }
+
+    string reorderedOutputFileNameFR3 = "/FR3_traces_reordered.txt";
+    if(!printTraces(reorderedOutputFileNameFR3, filePathOutput, trace, fracture))
+    {
+        cerr << "Something vrong printing the traces reordered" << endl;
         return false;
     }
 
@@ -312,6 +326,8 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
                 // for(unsigned int i = 0; i < 3; i++)
                 //     cout << intersection1(i) << endl;
 
+
+
                 Point1.push_back(intersection1);
             }
             // Se i punti non coincidono non si intersecano
@@ -380,12 +396,12 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
         if(c > a && c < b && b < d)
         {
             SaveTraces(c, b, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(false);
+            trace.Tips.push_back(true);
         }
         else if(a > c && a < d && d < b)
         {
             SaveTraces(a, d, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(false);
+            trace.Tips.push_back(true);
         }
         // else if((b > a && b < c && c < d) || (d > c && d < a && a < b))
         // {
@@ -394,27 +410,37 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
         else if(c > a && c < d && d < b)
         {
             SaveTraces(c, d, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(true);
+            trace.Tips.push_back(false);
         }
         else if(a > c && a < b && b < d)
         {
             SaveTraces(a, b, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(true);
+            trace.Tips.push_back(false);
         }
-        else if((a - c) <= tol && (b - d) <= tol)
+        else if(abs((a - c)) <= tol && (b - d) <= tol)
         {
             SaveTraces(a, b, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(true);
+            trace.Tips.push_back(false);
         }
-        else if((a - c) <= tol && b < d)
+        else if(abs((a - c)) <= tol && b < d)
         {
             SaveTraces(a, b, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(true);
+            trace.Tips.push_back(false);
         }
-        else if((a - c) <= tol && d < b)
+        else if(abs((a - c)) <= tol && d < b)
         {
             SaveTraces(c, d, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(true);
+            trace.Tips.push_back(false);
+        }
+        else if(abs((b - d)) <= tol && c < a)
+        {
+            SaveTraces(a, b, point, s, trace, Id1, Id2);
+            trace.Tips.push_back(false);
+        }
+        else if(abs((b - d)) <= tol && a < c)
+        {
+            SaveTraces(c, d, point, s, trace, Id1, Id2);
+            trace.Tips.push_back(false);
         }
     }
     return true;
@@ -429,11 +455,13 @@ void SaveTraces(double n, double m, Vector3d point, Vector3d s, Traces& trace, u
     P = point+s*n;
     Q = point+s*m;
     Coordinates << P,Q;
+    trace.coordinates.push_back(Coordinates);
     Vector2i idFracture;
     idFracture << Id1, Id2;
-    trace.coordinates.push_back(Coordinates);
-    trace.traceId.push_back(trace.numTraces);
     trace.fractureId.push_back(idFracture);
+    trace.traceId.push_back(trace.numTraces);
+    double lengthSegment = PointDistance(P, Q);
+    trace.length.push_back(lengthSegment);
     trace.numTraces++;
 }
 
@@ -463,6 +491,128 @@ bool PrintOnFile(const string fileName, const string filePath, Traces trace)
     file.close();
     return true;
 }
+
+
+bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace, const string filePathOutput)
+{
+    double tol = 1e-10;
+    for(unsigned int i = 0; i < fracture.numFracture; i++)
+    {
+        vector<unsigned int> passing = {};
+        vector<unsigned int> notPassing = {};
+        vector<double> lengthPassing = {};
+        vector<double> lengthNotPassing = {};
+        for(unsigned int j = 0; j < trace.numTraces; j++)
+        {
+            // Cerco nel vettore di vettori fractureId le posizioni in cui una delle due fratture che generano la traccia corrisponde alla frattura che sto considerando.
+            if(find(trace.fractureId[j].data(), trace.fractureId[j].data() + trace.fractureId[j].size(), fracture.fractureID[i]) != trace.fractureId[j].data() + trace.fractureId[j].size())
+            {
+                unsigned int position = j;
+                unsigned int counter = 0;
+                unsigned int n = 0;
+                // Ciclo su tutti i segmenti della frattura e verifico se uno dei vertici della traccia appartiene al segmento.
+                while(n < fracture.NumVertices[i])
+                {
+                    unsigned int k = (n+1) % fracture.NumVertices[i];
+                    // PQ è il vettore formato da due vertici consecutivi della frattura.
+                    Vector3d PQ = fracture.vertices[i].col(n) - fracture.vertices[i].col(k);
+                    // PA è il vettore formato da un vertice della frattura con un estremo della traccia.
+                    Vector3d PA = fracture.vertices[i].col(n) - trace.coordinates[position].col(0);
+                    // PB è il segmento formato dal vertice della frattura con l'altro vertice della traccia.
+                    Vector3d PB = fracture.vertices[i].col(n) - trace.coordinates[position].col(1);
+                    // Se il prodotto vettoriale tra PQ e PA oppure tra PQ e PB è zero, allora A o B appartengono al segmento PQ, dunque incremento di uno il contatore.
+                    if((PQ.cross(PA)).norm() <= tol || (PQ.cross(PB)).norm() <= tol)
+                        counter++;
+                    n++;
+                }
+                // Finito il ciclo su tutti i segmenti, se il contatore è uguale a 2 vuol dire che i vertici della traccia appartengono a due segmenti della frattura,
+                // dunque la traccia è passante per quella frattura. Memorizzo gli le posizioni, che corrispondono anche agli id delle tracce, in due liste, una per le tracce
+                // passanti e una per quelle non passanti.
+                if(counter == 2)
+                    passing.push_back(position);
+                else
+                    notPassing.push_back(position);
+            }
+        }
+        // Creo altre due liste, una per la lunghezza delle tracce passanti e una per la lunghezza delle tracce non passanti e inserisco le lunghezze mantenendo l'ordine degli id delle tracce.
+        for(unsigned int a : passing)
+            lengthPassing.push_back(trace.length[a]);
+        for(unsigned int a : notPassing)
+            lengthNotPassing.push_back(trace.length[a]);
+
+        // Ora riordino la lista delle lunghezze in ordine decrescente scambiando anche le posizioni della lista di indici, così da mantenere la corrispondenza.
+        if(!reordering(passing, lengthPassing))
+        {
+            cerr << "Error reordering the traces" << endl;
+            return false;
+        }
+
+        if(!reordering(notPassing, lengthNotPassing))
+        {
+            cerr << "Error reordering the traces" << endl;
+            return false;
+        }
+        trace.passingReordered.push_back(passing);
+        trace.notPassingReordered.push_back(notPassing);
+
+
+    }
+    return true;
+}
+
+
+double PointDistance(Vector3d P, Vector3d Q)
+{
+    return sqrt(((P[0]-Q[0]) * (P[0] - Q[0])) + ((P[1] - Q[1]) * (P[1] - Q[1])) + ((P[2] - Q[2]) * (P[2] - Q[2])));
+}
+
+
+bool reordering(vector<unsigned int>& idTraces, vector<double>& length)
+{
+    if(idTraces.size() != length.size())
+        return false;
+    vector<pair<double, unsigned int>> couple;
+    for(unsigned int i = 0; i < idTraces.size(); i++)
+        couple.push_back((make_pair(length[i], idTraces[i])));
+
+    sort(couple.begin(), couple.end(), [](const pair<double, unsigned int>& a, const pair<double, unsigned int>& b){
+        return a.first > b.first;
+    });
+    for(size_t i = 0; i < couple.size(); i++)
+    {
+        length[i] = couple[i].first;
+        idTraces[i] = couple[i].second;
+    }
+    return true;
+}
+
+
+// bool printTraces(const string fileName, const string filePath, Traces trace, DiscreteFractureNetwork fracture)
+// {
+//     ofstream file;
+//     file.open(filePath + fileName);
+//     if(file.fail())
+//     {
+//         cerr << "Error opening the file" << endl;
+//         return false;
+//     }
+
+//     for(unsigned int i = 0; i < fracture.numFracture; i++)
+//     {
+//         file << "# FractureId; NumTraces" << endl;
+//         file << fracture.fractureID[i] << "; " << trace.numTraces << endl;
+//         file << "# TraceId; Tips; Length" << endl;
+//         for(unsigned int j = 0; j < trace.passingReordered.size(); j++)
+//             file << trace.passingReordered[i][j] << trace.Tips[trace.passingReordered[i][j]] << trace.length[trace.passingReordered[i][j]] << endl;
+//         for(unsigned int j = 0; j < trace.notPassingReordered.size(); j++)
+//             file << trace.notPassingReordered[i][j] << trace.Tips[trace.notPassingReordered[i][j]] << trace.length[trace.notPassingReordered[i][j]] << endl;
+//     }
+
+//     file.close();
+//     return true;
+// }
+
+
 
 
 }

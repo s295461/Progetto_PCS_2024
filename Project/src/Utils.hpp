@@ -19,4 +19,12 @@ void SaveTraces(double n, double m, Vector3d point, Vector3d s, Traces& trace, u
 
 bool PrintOnFile(const string fileName, const string filePath, Traces trace);
 
+bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace, const string filePathOutput);
+
+double PointDistance(Vector3d P, Vector3d Q);
+
+bool reordering(vector<unsigned int>& idTraces, vector<double>& length);
+
+bool printTraces(const string fileName, const string filePath, Traces trace, DiscreteFractureNetwork fracture);
+
 }
