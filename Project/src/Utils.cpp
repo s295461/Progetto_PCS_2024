@@ -38,7 +38,9 @@ bool ImportFracture(const string fileNameInput, const string fileNameOutput, con
         return false;
     }
 
+
     if(!printTraces(fileNameOutputReordered, filePathOutput, trace, fracture))
+
     {
         cerr << "Something vrong printing the traces reordered" << endl;
         return false;
@@ -416,7 +418,7 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
     return true;
 }
 
-
+  
 // Con questa funzione salvo tutti i valori legati ad una traccia nella struttura Traces.
 void SaveTraces(double n, double m, Vector3d point, Vector3d s, Traces& trace, unsigned int Id1, unsigned int Id2)
 {
@@ -463,7 +465,9 @@ bool PrintOnFile(const string fileName, const string filePath, Traces trace)
 }
 
 
+
 bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
+
 {
     double tol = 1e-10;
     for(unsigned int i = 0; i < fracture.numFracture; i++)
@@ -543,6 +547,7 @@ bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
 }
 
 
+
 double PointDistance(Vector3d P, Vector3d Q)
 {
     return sqrt(((P[0]-Q[0]) * (P[0] - Q[0])) + ((P[1] - Q[1]) * (P[1] - Q[1])) + ((P[2] - Q[2]) * (P[2] - Q[2])));
@@ -569,6 +574,7 @@ bool reordering(vector<unsigned int>& idTraces, vector<double>& length)
 }
 
 
+
 bool printTraces(const string fileName, const string filePath, Traces trace, DiscreteFractureNetwork fracture)
 {
     ofstream file;
@@ -593,8 +599,6 @@ bool printTraces(const string fileName, const string filePath, Traces trace, Dis
     file.close();
     return true;
 }
-
-
 
 
 }
