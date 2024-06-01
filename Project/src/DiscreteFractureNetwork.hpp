@@ -38,10 +38,8 @@ struct Traces
     vector<unsigned int> traceId = {};
     vector<Vector2i> fractureId = {};
     vector<MatrixXd> coordinates = {};
-    vector<bool> Tips = {};
     vector<double> length = {};
-    vector<vector<unsigned int>> passingReordered = {};
-    vector<vector<unsigned int>> notPassingReordered = {};
+    vector<vector<tuple<unsigned int, bool, double>>> traceReordered;
 };
 
 
