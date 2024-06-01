@@ -7,7 +7,11 @@ using namespace std;
 
 namespace FractureNetwork {
 
-bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered, const string filePathInput, const string filePathOutput, DiscreteFractureNetwork fracture, Traces trace);
+bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered, const string filePathInput, const string filePathOutput, DiscreteFractureNetwork& fracture, Traces& trace);
+
+void clearDiscreteFractureNetwork(DiscreteFractureNetwork& fracture);
+
+void clearTraces(Traces& trace);
 
 bool ReadFracture(const string& filePath, const string& fileName, DiscreteFractureNetwork& fracture);
 
