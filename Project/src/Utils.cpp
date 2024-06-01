@@ -5,17 +5,16 @@
 #include <iomanip>
 #include <cmath>
 #include <algorithm>
+#include <tuple>
 
 using namespace std;
 
 namespace FractureNetwork {
 
 
-bool ImportFracture(const string& filePathInput, const string filePathOutput, DiscreteFractureNetwork& fracture, Traces& trace)
+bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered, const string filePathInput, const string filePathOutput, DiscreteFractureNetwork fracture, Traces trace)
 {
-    // cout << "FR3_data" << endl;
-    string fileNameFR3 = "/FR3_data.txt";
-    if(!ReadFracture(filePathInput, fileNameFR3, fracture))
+    if(!ReadFracture(filePathInput, fileNameInput, fracture))
     {
         cerr << "Something wrong with the reading of the fracture" << endl;
         return false;
@@ -27,30 +26,24 @@ bool ImportFracture(const string& filePathInput, const string filePathOutput, Di
         return false;
     }
 
-    string outputFileNameFR3 = "/FR3_traces.txt";
-    if(!PrintOnFile(outputFileNameFR3, filePathOutput, trace))
+    if(!PrintOnFile(fileNameOutput, filePathOutput, trace))
     {
         cerr << "Something wrong while printing the result in a file" << endl;
         return false;
     }
 
-    if(!TraceReorder(fracture, trace, filePathOutput))
+    if(!TraceReorder(fracture, trace))
     {
         cerr << "Something wrong while reordering traces" << endl;
         return false;
     }
 
-    string reorderedOutputFileNameFR3 = "/FR3_traces_reordered.txt";
-    if(!printTraces(reorderedOutputFileNameFR3, filePathOutput, trace, fracture))
+    if(!printTraces(fileNameOutputReordered, filePathOutput, trace, fracture))
     {
         cerr << "Something vrong printing the traces reordered" << endl;
         return false;
     }
 
-    //cout << endl;
-    //cout << "FR10_data" << endl;
-    //string fileNameFR10 = "/FR10_data.txt";
-    //readFracture(filePath, fileNameFR10, fracture);
     return true;
 }
 
@@ -394,54 +387,31 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
         }
 
         if(c > a && c < b && b < d)
-        {
             SaveTraces(c, b, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(true);
-        }
+
         else if(a > c && a < d && d < b)
-        {
             SaveTraces(a, d, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(true);
-        }
-        // else if((b > a && b < c && c < d) || (d > c && d < a && a < b))
-        // {
-        //     cout << "Non si intersecano" << endl;
-        // }
+
         else if(c > a && c < d && d < b)
-        {
             SaveTraces(c, d, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(false);
-        }
+
         else if(a > c && a < b && b < d)
-        {
             SaveTraces(a, b, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(false);
-        }
+
         else if(abs((a - c)) <= tol && (b - d) <= tol)
-        {
             SaveTraces(a, b, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(false);
-        }
+
         else if(abs((a - c)) <= tol && b < d)
-        {
             SaveTraces(a, b, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(false);
-        }
+
         else if(abs((a - c)) <= tol && d < b)
-        {
             SaveTraces(c, d, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(false);
-        }
+
         else if(abs((b - d)) <= tol && c < a)
-        {
             SaveTraces(a, b, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(false);
-        }
+
         else if(abs((b - d)) <= tol && a < c)
-        {
             SaveTraces(c, d, point, s, trace, Id1, Id2);
-            trace.Tips.push_back(false);
-        }
     }
     return true;
 }
@@ -493,11 +463,12 @@ bool PrintOnFile(const string fileName, const string filePath, Traces trace)
 }
 
 
-bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace, const string filePathOutput)
+bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
 {
     double tol = 1e-10;
     for(unsigned int i = 0; i < fracture.numFracture; i++)
     {
+        vector<tuple<unsigned int, bool, double>> fractureTraces;
         vector<unsigned int> passing = {};
         vector<unsigned int> notPassing = {};
         vector<double> lengthPassing = {};
@@ -552,10 +523,21 @@ bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace, const string
             cerr << "Error reordering the traces" << endl;
             return false;
         }
-        trace.passingReordered.push_back(passing);
-        trace.notPassingReordered.push_back(notPassing);
 
+        for(unsigned int n = 0; n < passing.size(); n++)
+        {
+            tuple<unsigned int, bool, double> triplets;
+            triplets = make_tuple(passing[n], false, lengthPassing[n]);
+            fractureTraces.push_back(triplets);
+        }
+        for(unsigned int n = 0; n < notPassing.size(); n++)
+        {
+            tuple<unsigned int, bool, double> triplets;
+            triplets = make_tuple(notPassing[n], true, lengthNotPassing[n]);
+            fractureTraces.push_back(triplets);
+        }
 
+        trace.traceReordered.push_back(fractureTraces);
     }
     return true;
 }
@@ -587,30 +569,30 @@ bool reordering(vector<unsigned int>& idTraces, vector<double>& length)
 }
 
 
-// bool printTraces(const string fileName, const string filePath, Traces trace, DiscreteFractureNetwork fracture)
-// {
-//     ofstream file;
-//     file.open(filePath + fileName);
-//     if(file.fail())
-//     {
-//         cerr << "Error opening the file" << endl;
-//         return false;
-//     }
+bool printTraces(const string fileName, const string filePath, Traces trace, DiscreteFractureNetwork fracture)
+{
+    ofstream file;
+    file.open(filePath + fileName);
+    if(file.fail())
+    {
+        cerr << "Error opening the file" << endl;
+        return false;
+    }
 
-//     for(unsigned int i = 0; i < fracture.numFracture; i++)
-//     {
-//         file << "# FractureId; NumTraces" << endl;
-//         file << fracture.fractureID[i] << "; " << trace.numTraces << endl;
-//         file << "# TraceId; Tips; Length" << endl;
-//         for(unsigned int j = 0; j < trace.passingReordered.size(); j++)
-//             file << trace.passingReordered[i][j] << trace.Tips[trace.passingReordered[i][j]] << trace.length[trace.passingReordered[i][j]] << endl;
-//         for(unsigned int j = 0; j < trace.notPassingReordered.size(); j++)
-//             file << trace.notPassingReordered[i][j] << trace.Tips[trace.notPassingReordered[i][j]] << trace.length[trace.notPassingReordered[i][j]] << endl;
-//     }
-
-//     file.close();
-//     return true;
-// }
+    for(unsigned int i = 0; i < fracture.numFracture; i++)
+    {
+        unsigned int fractureNumTraces = trace.traceReordered[i].size();
+        file << "# FractureId; NumTraces" << endl;
+        file << fracture.fractureID[i] << "; " << fractureNumTraces << endl;
+        file << "# TraceId; Tips; Length" << endl;
+        if(fractureNumTraces != 0)
+            for(unsigned int j = 0; j < fractureNumTraces; j++)
+                file << get<0>(trace.traceReordered[i][j]) << "; " << get<1>(trace.traceReordered[i][j]) << "; " << get<2>(trace.traceReordered[i][j]) << endl;
+        file << endl;
+    }
+    file.close();
+    return true;
+}
 
 
 
