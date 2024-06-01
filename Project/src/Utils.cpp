@@ -12,7 +12,7 @@ using namespace std;
 namespace FractureNetwork {
 
 
-bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered, const string filePathInput, const string filePathOutput, DiscreteFractureNetwork fracture, Traces trace)
+bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered, const string filePathInput, const string filePathOutput, DiscreteFractureNetwork& fracture, Traces& trace)
 {
     if(!ReadFracture(filePathInput, fileNameInput, fracture))
     {
@@ -47,6 +47,26 @@ bool ImportFracture(const string fileNameInput, const string fileNameOutput, con
     return true;
 }
 
+
+// Questa funzione svuota tutti gli elementi all'interno della struttura DiscreteFractureNetwork
+void clearDiscreteFractureNetwork(DiscreteFractureNetwork& fracture)
+{
+    fracture.numFracture = 0;
+    fracture.fractureID.clear();
+    fracture.NumVertices.clear();
+    fracture.vertices.clear();
+}
+
+// Questa funzione svuota tutti gli elementi all'interno della struttura Traces
+void clearTraces(Traces& trace)
+{
+    trace.numTraces = 0;
+    trace.traceId.clear();
+    trace.fractureId.clear();
+    trace.coordinates.clear();
+    trace.length.clear();
+    trace.traceReordered.clear();
+}
 
 // Questa funzione apre un file, legge il contenuto e lo salva in strutture dati adeguate
 bool ReadFracture(const string& filePath, const string& fileName, DiscreteFractureNetwork& fracture)

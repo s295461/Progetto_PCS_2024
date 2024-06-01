@@ -25,12 +25,23 @@ int main()
         return 1;
 
 
+
+    clearDiscreteFractureNetwork(fracture);
+    clearTraces(trace);
+
+
+
     /// FR10
     string fileNameFR10 = "/FR10_data.txt";
     string fileNameOutputFR10 = "/FR10_traces.txt";
     string fileNameOutputReorderedFR10 = "/FR10_traces_reordered.txt";
     if(!ImportFracture(fileNameFR10, fileNameOutputFR10, fileNameOutputReorderedFR10, filePathInput, filePathOutput, fracture, trace))
         return 1;
+
+
+    clearDiscreteFractureNetwork(fracture);
+    clearTraces(trace);
+
 
 
     /// FR50
@@ -41,12 +52,23 @@ int main()
         return 1;
 
 
+
+    clearDiscreteFractureNetwork(fracture);
+    clearTraces(trace);
+
+
+
     /// FR82
     string fileNameFR82 = "/FR82_data.txt";
     string fileNameOutputFR82 = "/FR82_traces.txt";
     string fileNameOutputReorderedFR82 = "/FR82_traces_reordered.txt";
     if(!ImportFracture(fileNameFR82, fileNameOutputFR82, fileNameOutputReorderedFR82, filePathInput, filePathOutput, fracture, trace))
         return 1;
+
+
+    clearDiscreteFractureNetwork(fracture);
+    clearTraces(trace);
+
 
 
     /// FR200
@@ -57,12 +79,22 @@ int main()
         return 1;
 
 
+    clearDiscreteFractureNetwork(fracture);
+    clearTraces(trace);
+
+
+
     /// FR362
     string fileNameFR362 = "/FR362_data.txt";
     string fileNameOutputFR362 = "/FR362_traces.txt";
     string fileNameOutputReorderedFR362 = "/FR362_traces_reordered.txt";
     if(!ImportFracture(fileNameFR362, fileNameOutputFR362, fileNameOutputReorderedFR362, filePathInput, filePathOutput, fracture, trace))
         return 1;
+
+
+
+    clearDiscreteFractureNetwork(fracture);
+    clearTraces(trace);
 
     return 0;
 }
