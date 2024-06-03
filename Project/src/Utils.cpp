@@ -9,7 +9,7 @@
 
 using namespace std;
 
-namespace FractureNetwork {
+// namespace FractureNetwork {
 
 
 bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered, const string filePathInput, const string filePathOutput, DiscreteFractureNetwork& fracture, Traces& trace)
@@ -613,8 +613,12 @@ bool printTraces(const string fileName, const string filePath, Traces trace, Dis
     file.close();
     return true;
 }
+// }
+
+// namespace PolygonalMesh {
 
 
 
 
-}
+
+// }

@@ -1,13 +1,14 @@
 #include <iostream>
-#include <vector>
 #include "Eigen/Eigen"
 #include "Utils.hpp"
 #include "DiscreteFractureNetwork.hpp"
+#include "PolygonalMesh.hpp"
 
 
 using namespace std;
 using namespace Eigen;
-using namespace FractureNetwork;
+// using namespace FractureNetwork;
+// using namespace PolygonalMesh;
 
 int main()
 {

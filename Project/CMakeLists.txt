@@ -44,10 +44,6 @@ list(APPEND DFN_sources ${src_sources})
 list(APPEND DFN_headers ${src_headers})
 list(APPEND DFN_includes ${src_includes})
 
-# list(APPEND DFN_SOURCES ${DFN_sources})
-# list(APPEND DFN_HEADERS ${DFN_headers})
-# list(APPEND DFN_INCLUDE ${DFN_includes})
-
 add_subdirectory(src_test)
 list(APPEND DFN_TEST_sources ${src_test_sources})
 list(APPEND DFN_TEST_headers ${src_test_headers})
