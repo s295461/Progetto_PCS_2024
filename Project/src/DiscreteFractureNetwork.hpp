@@ -14,13 +14,23 @@ struct DiscreteFractureNetwork
     unsigned int numFracture = 0;
     vector<unsigned int> fractureID = {};
     vector<unsigned int> NumVertices = {};
-    vector<MatrixXd> vertices;
+    vector<MatrixXd> vertices = {};
 };
 
-// struct Vec3d
-// {
-//     double x, y, z;
-// };
+
+struct BoundingBox
+{
+    Vector3d min;
+    Vector3d max;
+};
+
+
+struct FractureBBox
+{
+    BoundingBox bbox;
+    unsigned int fractureID;
+};
+
 
 struct Traces
 {
@@ -28,10 +38,10 @@ struct Traces
     vector<unsigned int> traceId = {};
     vector<Vector2i> fractureId = {};
     vector<MatrixXd> coordinates = {};
+    vector<bool> Tips;
+    vector<double> length = {};
 };
 
 
+
 }
-
-
-//metterci dentro ID --> ottengo la matrice dei vertici
