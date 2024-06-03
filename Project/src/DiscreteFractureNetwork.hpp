@@ -1,13 +1,12 @@
 #pragma once
 
-#include <iostream>
 #include <vector>
 #include "Eigen/Eigen"
 
 using namespace std;
 using namespace Eigen;
 
-namespace FractureNetwork {
+// namespace FractureNetwork {
 
 struct DiscreteFractureNetwork
 {
@@ -44,4 +43,4 @@ struct Traces
 
 
 
-}
+// }
