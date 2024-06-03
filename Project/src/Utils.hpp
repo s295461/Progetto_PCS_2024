@@ -5,7 +5,7 @@
 
 using namespace std;
 
-// namespace FractureNetwork {
+namespace FractureNetwork {
 
 bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered, const string filePathInput, const string filePathOutput, DiscreteFractureNetwork& fracture, Traces& trace);
 
@@ -33,8 +33,12 @@ bool reordering(vector<unsigned int>& idTraces, vector<double>& length);
 
 bool printTraces(const string fileName, const string filePath, Traces trace, DiscreteFractureNetwork fracture);
 
-// }
+}
 
-// namespace PolygonalMesh {
+namespace PolygonalMesh {
 
-// }
+bool fractureCut(FractureNetwork::DiscreteFractureNetwork& fracture, FractureNetwork::Traces& trace, Cell0D& Cell0D, Cell1D& Cell1D, Cell2D& Cell2D);
+
+bool passingCut(FractureNetwork::DiscreteFractureNetwork fracture, FractureNetwork::Traces trace, tuple<unsigned int, bool, double> triplets, unsigned int id);
+
+}

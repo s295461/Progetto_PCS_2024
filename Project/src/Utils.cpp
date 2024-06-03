@@ -9,7 +9,7 @@
 
 using namespace std;
 
-// namespace FractureNetwork {
+namespace FractureNetwork {
 
 
 bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered, const string filePathInput, const string filePathOutput, DiscreteFractureNetwork& fracture, Traces& trace)
@@ -619,10 +619,124 @@ bool printTraces(const string fileName, const string filePath, Traces trace, Dis
     file.close();
     return true;
 }
-// }
+}
 
-// namespace PolygonalMesh {
+namespace PolygonalMesh {
+
+// Questa funzione effettua il taglio delle fratture in sottopoligoni e salva i risultati in una mesh poligonale.
+bool fractureCut(FractureNetwork::DiscreteFractureNetwork& fracture, FractureNetwork::Traces& trace, Cell0D& Cell0D, Cell1D& Cell1D, Cell2D& Cell2D)
+{
+    // Prendo in esame una frattura alla volta
+    for(unsigned int i = 0; i < fracture.numFracture; i++)
+    {
+        unsigned int id = fracture.fractureID[i];
+        // Prendo una traccia alla volta
+        for(unsigned int j = 0; j < trace.numTraces; j++)
+        {
+            tuple<unsigned int, bool, double> triplets = trace.traceReordered[i][j];
+            if(!get<1>(triplets))
+            {
+                if(!passingCut(fracture, trace, triplets, id))
+                {
+                    cerr << "Error cutting a passing trace" << endl;
+                    return false;
+                }
+            }
+        }
 
 
-// }
+
+
+
+    }
+
+
+
+    return true;
+}
+
+// Questa funzione effettua il taglio di una frattura per una traccia passante
+bool passingCut(FractureNetwork::DiscreteFractureNetwork fracture, FractureNetwork::Traces trace, tuple<unsigned int, bool, double> triplets, unsigned int id)
+{
+    double tol = 1e-10;
+    vector<Vector3d> Points;
+    unsigned int idTrace = get<0>(triplets);
+    unsigned int n = 0;
+    unsigned int pos1 = 0;
+    unsigned int pos2 = 0;
+    // Creo un contatore che viene incrementato ogni volta cha aggiungo un elemento a Points
+    unsigned int c = 0;
+    // Con questo ciclo while creo un vettore Points che contiene i vertici della frattura e della traccia nell'ordine in cui li trovo percorrendo il perimetro della frattura.
+    while(n < fracture.NumVertices[id])
+    {
+        unsigned int k = (n + 1) % fracture.NumVertices[id];
+        Vector3d P = fracture.vertices[id].col(n);
+        Vector3d Q = fracture.vertices[id].col(k);
+        Vector3d A = trace.coordinates[idTrace].col(0);
+        Vector3d B = trace.coordinates[idTrace].col(1);
+        Vector3d PQ = Q - P;
+        Vector3d PA = A - P;
+        Vector3d PB = B - P;
+        Points.push_back(P);
+        c++;
+        if((PQ.cross(PA)).norm() < tol)
+        {
+            Points.push_back(A);
+            pos1 = c;
+            c++;
+        }
+        else if((PQ.cross(PB)).norm() < tol)
+        {
+            Points.push_back(B);
+            pos2 = c;
+            c++;
+        }
+        n++;
+    }
+
+    vector<Vector3d> subfracture1, subfracture2;
+    unsigned int m = 0;
+    while(m < Points.size())
+    {
+        subfracture1.push_back(Points[m]);
+        if(m == pos1)
+        {
+            m = pos2;
+            subfracture1.push_back(Points[m]);
+        }
+        else if(m == pos2)
+        {
+            m = pos1;
+            subfracture1.push_back(Points[m]);
+        }
+        m++;
+    }
+    unsigned int t = 0;
+    if(pos1 < pos2)
+    {
+        t = pos1;
+        while(t < Points.size())
+        {
+            subfracture2.push_back(Points[t]);
+            if(t == pos2)
+                t = Points.size() - 1;
+            t++;
+        }
+    }
+    else
+    {
+        t = pos2;
+        while(t < Points.size())
+        {
+            subfracture2.push_back(Points[t]);
+            if(t == pos1 )
+                t = Points.size() - 1;
+            t++;
+        }
+}
+    return true;
+}
+
+
+}
 
