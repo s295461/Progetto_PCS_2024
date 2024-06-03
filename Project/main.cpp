@@ -7,13 +7,16 @@
 
 using namespace std;
 using namespace Eigen;
-// using namespace FractureNetwork;
-// using namespace PolygonalMesh;
+using namespace FractureNetwork;
+using namespace PolygonalMesh;
 
 int main()
 {
     DiscreteFractureNetwork fracture;
     Traces trace;
+    Cell0D Cell0D;
+    Cell1D Cell1D;
+    Cell2D Cell2D;
     string filePathInput = "DFN";
     string filePathOutput = "Result";
 
@@ -25,7 +28,8 @@ int main()
     if(!ImportFracture(fileNameFR3, fileNameOutputFR3, fileNameOutputReorderedFR3, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
-
+    if(!fractureCut(fracture, trace, Cell0D, Cell1D, Cell2D))
+        return 1;
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);

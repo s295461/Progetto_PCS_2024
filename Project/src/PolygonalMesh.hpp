@@ -6,7 +6,7 @@
 using namespace std;
 using namespace Eigen;
 
-// namespace PolygonalMesh {
+namespace PolygonalMesh {
 
 struct Cell0D
 {
@@ -31,4 +31,4 @@ struct Cell2D
     vector<list<unsigned int>> edgesId = {};
 };
 
-// }
+}
