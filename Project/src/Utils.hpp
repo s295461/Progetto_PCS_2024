@@ -39,6 +39,8 @@ namespace PolygonalMesh {
 
 bool fractureCut(FractureNetwork::DiscreteFractureNetwork& fracture, FractureNetwork::Traces& trace, Cell0D& Cell0D, Cell1D& Cell1D, Cell2D& Cell2D);
 
-bool passingCut(FractureNetwork::DiscreteFractureNetwork fracture, FractureNetwork::Traces trace, tuple<unsigned int, bool, double> triplets, unsigned int id);
+bool createSubfracture(vector<Vector3d> subfracture, vector<Vector3d> cuttingTrace, vector<vector<Vector3d>>& subfractureVertices);
+
+vector<Vector3d> extendTraces(MatrixXd fractureVertices, MatrixXd verticesTrace);
 
 }
