@@ -43,6 +43,8 @@ int main()
     if(!ImportFracture(fileNameFR10, fileNameOutputFR10, fileNameOutputReorderedFR10, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
+    // if(!fractureCut(fracture, trace, Cell0D, Cell1D, Cell2D))
+    //     return 1;
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);

@@ -43,4 +43,8 @@ bool createSubfracture(vector<Vector3d> subfracture, vector<Vector3d> cuttingTra
 
 vector<Vector3d> extendTraces(MatrixXd fractureVertices, MatrixXd verticesTrace);
 
+// vector<Vector3d> intersectTraces(FractureNetwork::Traces trace, unsigned int idTrace, unsigned int idFracture);
+
+vector<tuple<Vector3d, unsigned int, unsigned int>> intersectTraces(FractureNetwork::Traces trace, unsigned int idFracture);
+
 }
