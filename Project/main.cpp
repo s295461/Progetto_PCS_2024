@@ -8,15 +8,19 @@
 using namespace std;
 using namespace Eigen;
 using namespace FractureNetwork;
+
 using namespace PolygonalMesh;
+
 
 int main()
 {
     DiscreteFractureNetwork fracture;
     Traces trace;
+
     Cell0D Cell0D;
     Cell1D Cell1D;
     Cell2D Cell2D;
+>
     string filePathInput = "DFN";
     string filePathOutput = "Result";
 
@@ -33,6 +37,7 @@ int main()
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
+
 
 
 
@@ -86,8 +91,12 @@ int main()
         return 1;
 
 
+
+
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
+
+
 
 
 

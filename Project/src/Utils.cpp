@@ -13,6 +13,7 @@ namespace FractureNetwork {
 
 
 
+
 bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered, const string filePathInput, const string filePathOutput, DiscreteFractureNetwork& fracture, Traces& trace)
 {
 
@@ -43,6 +44,9 @@ bool ImportFracture(const string fileNameInput, const string fileNameOutput, con
 
     if(!printTraces(fileNameOutputReordered, filePathOutput, trace, fracture))
 
+
+    if(!printTraces(fileNameOutputReordered, filePathOutput, trace, fracture))
+
     {
         cerr << "Something vrong printing the traces reordered" << endl;
         return false;
@@ -50,6 +54,8 @@ bool ImportFracture(const string fileNameInput, const string fileNameOutput, con
 
     return true;
 }
+
+
 
 
 
@@ -173,6 +179,7 @@ bool ReadFracture(const string& filePath, const string& fileName, DiscreteFractu
         }
         listLines.pop_front(); // Elimino la riga delle z
 
+
         // Salvo in una matrice le coordinate dei vertici della frattura
         MatrixXd verticesFracture(3,fracture.NumVertices[i]);
         verticesFracture << x.transpose(), y.transpose(), z.transpose();
@@ -199,8 +206,10 @@ BoundingBox BBox3D(const MatrixXd& vertices)
     }
 
 
+
     return bbox;
 }
+
 
 // Questa funzione calcola l'intersezione tra due piani creati da due fratture
 bool FractureIntersection(const DiscreteFractureNetwork fracture, Traces& trace)
@@ -320,6 +329,7 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
             double u2;
             t2 = ((P2.cross(v2) - point.cross(v2)).dot(s.cross(v2))) / (((s.cross(v2)).norm())*((s.cross(v2)).norm()));
             u2 = ((point.cross(s) - P2.cross(s)).dot(v2.cross(s))) / (((v2.cross(s)).norm())*((v2.cross(s)).norm()));
+
 
             Vector3d intersection1 = point + t1 * s;
             Vector3d verify1 = P1 + u1 * v1;
@@ -556,6 +566,9 @@ bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
 }
 
 
+        if(c > a && c < b && b < d)
+            SaveTraces(c, b, point, s, trace, Id1, Id2);
+
 
 double PointDistance(Vector3d P, Vector3d Q)
 {
@@ -585,6 +598,7 @@ bool reordering(vector<unsigned int>& idTraces, vector<double>& length)
 
 
 bool printTraces(const string fileName, const string filePath, Traces trace, DiscreteFractureNetwork fracture)
+
 {
     ofstream file;
     file.open(filePath + fileName);
@@ -593,6 +607,7 @@ bool printTraces(const string fileName, const string filePath, Traces trace, Dis
         cerr << "Error opening the file" << endl;
         return false;
     }
+
 
     for(unsigned int i = 0; i < fracture.numFracture; i++)
     {
@@ -604,10 +619,12 @@ bool printTraces(const string fileName, const string filePath, Traces trace, Dis
             for(unsigned int j = 0; j < fractureNumTraces; j++)
                 file << get<0>(trace.traceReordered[i][j]) << "; " << get<1>(trace.traceReordered[i][j]) << "; " << get<2>(trace.traceReordered[i][j]) << endl;
         file << endl;
+
     }
     file.close();
     return true;
 }
+
 }
 
 namespace PolygonalMesh {
@@ -730,6 +747,7 @@ bool createSubfracture(vector<Vector3d> subfracture, vector<Vector3d> cuttingTra
             c++;
         }
         n++;
+
     }
 
     vector<Vector3d> subfracture1, subfracture2;
@@ -797,6 +815,7 @@ vector<Vector3d> extendTraces(MatrixXd fractureVertices, MatrixXd verticesTrace)
             t = ((point1.cross(vec1) - point.cross(vec1)).dot(vec.cross(vec1))) / (((vec.cross(vec1)).norm())*((vec.cross(vec1)).norm()));
             u = ((point.cross(vec) - point1.cross(vec)).dot(vec1.cross(vec))) / (((vec1.cross(vec)).norm())*((vec1.cross(vec)).norm()));
 
+
             Vector3d intersection = point + t * vec;
             Vector3d verify = point1 + u * vec1;
 
@@ -809,6 +828,7 @@ vector<Vector3d> extendTraces(MatrixXd fractureVertices, MatrixXd verticesTrace)
         i++;
     }
     return extendedVertices;
+
 }
 
 // // Questa funzione trova i punti di intersezione tra una traccia e tutte quelle che tagliano precedentemente la frattura
