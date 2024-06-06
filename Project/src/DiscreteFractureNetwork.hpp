@@ -39,6 +39,7 @@ struct Traces
     vector<Vector2i> fractureId = {};
     vector<MatrixXd> coordinates = {};
     vector<bool> Tips;
+    vector<double> length = {};
 };
 
 
