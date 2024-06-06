@@ -12,9 +12,10 @@ using namespace std;
 namespace FractureNetwork {
 
 
+
 bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered, const string filePathInput, const string filePathOutput, DiscreteFractureNetwork& fracture, Traces& trace)
 {
-    if(!ReadFracture(filePathInput, fileNameInput, fracture))
+
     {
         cerr << "Something wrong with the reading of the fracture" << endl;
         return false;
@@ -32,6 +33,7 @@ bool ImportFracture(const string fileNameInput, const string fileNameOutput, con
         return false;
     }
 
+
     if(!TraceReorder(fracture, trace))
     {
         cerr << "Something wrong while reordering traces" << endl;
@@ -48,6 +50,7 @@ bool ImportFracture(const string fileNameInput, const string fileNameOutput, con
 
     return true;
 }
+
 
 
 // Questa funzione svuota tutti gli elementi all'interno della struttura DiscreteFractureNetwork
@@ -170,12 +173,6 @@ bool ReadFracture(const string& filePath, const string& fileName, DiscreteFractu
         }
         listLines.pop_front(); // Elimino la riga delle z
 
-        // // Stampo i vertici
-        // for(unsigned int n = 0; n < fracture.NumVertices[i]; n++)
-        // {
-        //     cout << scientific << setprecision(16) << "Vertices " << n+1 << ": x: " << x[n] << "; y: " << y[n] << "; z: " << z[n] << endl;
-        // }
-
         // Salvo in una matrice le coordinate dei vertici della frattura
         MatrixXd verticesFracture(3,fracture.NumVertices[i]);
         verticesFracture << x.transpose(), y.transpose(), z.transpose();
@@ -188,7 +185,6 @@ bool ReadFracture(const string& filePath, const string& fileName, DiscreteFractu
     file.close();
     return true;
 }
-
 
 BoundingBox BBox3D(const MatrixXd& vertices)
 {
@@ -205,7 +201,6 @@ BoundingBox BBox3D(const MatrixXd& vertices)
 
     return bbox;
 }
-
 
 // Questa funzione calcola l'intersezione tra due piani creati da due fratture
 bool FractureIntersection(const DiscreteFractureNetwork fracture, Traces& trace)
@@ -335,6 +330,7 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
             // Se il punto di intersezione coincide con il punto di verifica, allora è corretto
             if((intersection1 - verify1).norm() < tol && u1 >= 0 && u1 <= 1)
             {
+
                 // cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
                 // cout << "Vertices_1: " << n << ", " << k << endl;
                 // cout << "Intersection_1: " << endl;
@@ -342,42 +338,14 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
                 //     cout << intersection1(i) << endl;
 
 
-
                 Point1.push_back(intersection1);
             }
-            // Se i punti non coincidono non si intersecano
-            // else
-            // {
-            //     cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
-            //     cout << "Vertices_1: " << n << ", " << k << endl;
-            //     cout << "Non si intersecano" << endl;
-            // }
 
             if((intersection2 - verify2).norm() < tol && u2 >= 0 && u2 <= 1)
             {
-                // cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
-                // cout << "Vertices_2: " << m << ", " << h << endl;
-                // cout << "Intersection_2: " << endl;
-                // for(unsigned int i = 0; i < 3; i++)
-                //     cout << intersection2(i) << endl;
-
                 Point2.push_back(intersection2);
             }
-            // else
-            // {
-            //     cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
-            //     cout << "Vertices_2: " << m << ", " << h << endl;
-            //     cout << "Non si intersecano" << endl;
-            // }
         }
-        // else
-        // {
-        //     cout << "Id1: " << Id1 << ", Id2: " << Id2 << endl;
-        //     cout << "Vertices: " << n << ", " << k << endl;
-        //     cout << "Sono parallele, non si intersecano" << endl;
-        // }
-
-        // Passo ai due segmenti successivi
         n++;
         m++;
     }
@@ -451,12 +419,13 @@ void SaveTraces(double n, double m, Vector3d point, Vector3d s, Traces& trace, u
     Vector2i idFracture;
     idFracture << Id1, Id2;
     trace.fractureId.push_back(idFracture);
+
     trace.traceId.push_back(trace.numTraces);
     double lengthSegment = PointDistance(P, Q);
+
     trace.length.push_back(lengthSegment);
     trace.numTraces++;
 }
-
 
 
 // Questa funzione stampa i risultati in un file
@@ -484,6 +453,26 @@ bool PrintOnFile(const string fileName, const string filePath, Traces trace)
     return true;
 }
 
+double PointDistance(Vector3d P, Vector3d Q){
+    return sqrt(((P[0]-Q[0])*(P[0]-Q[0])+((P[1]-Q[1])*(P[1]-Q[1]))+((P[2]-Q[2])*(P[2]-Q[2]))));
+}
+
+
+bool TraceReorder(const DiscreteFractureNetwork fracture, Traces& trace){
+    for(unsigned int i = 0; i < fracture.numFracture; i++){
+        for(unsigned int j = 0; j < trace.numTraces; j++){
+            if(trace.fractureId[i][0] = Id0){
+                size_t position = trace.fractureId.find(trace.fractureId[i]);   //Cerchiamo la posizione del vettore che contiene l'Id
+            }
+            else if(trace.fractureId[i][1] = Id1){
+
+            }
+        }
+
+    }
+
+    return true;
+}
 
 
 bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
