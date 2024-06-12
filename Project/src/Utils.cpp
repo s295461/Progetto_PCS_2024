@@ -6,17 +6,17 @@
 #include <cmath>
 #include <algorithm>
 #include <tuple>
-
+#include <string>
+#include <cerrno>
 using namespace std;
 
 namespace FractureNetwork {
 
 
-
-
-bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered, const string filePathInput, const string filePathOutput, DiscreteFractureNetwork& fracture, Traces& trace)
+bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered, const string fileNameOutputParaview,
+                    const string filePathInput, const string filePathOutput , DiscreteFractureNetwork& fracture, Traces& trace)
 {
-
+    if(!PrintOnFile(fileNameInput, filePathInput, trace))
     {
         cerr << "Something wrong with the reading of the fracture" << endl;
         return false;
@@ -34,6 +34,11 @@ bool ImportFracture(const string fileNameInput, const string fileNameOutput, con
         return false;
     }
 
+    if(!PrintOnFile(fileNameOutputParaview, filePathInput, trace))
+    {
+        cerr << "Something wrong while printing the result in a file" << endl;
+        return false;
+    }
 
     if(!TraceReorder(fracture, trace))
     {
@@ -56,7 +61,91 @@ bool ImportFracture(const string fileNameInput, const string fileNameOutput, con
 }
 
 
+void rewriteData(const string& inputFileName, const string& outputFileName) {
+    ifstream inputFile(inputFileName);
+    ofstream outputFile(outputFileName);
 
+    if (!inputFile.is_open()) {
+        cerr << "Error opening input file: " << inputFileName << endl;
+        cerr << "Failed to open input file. Error code: " << errno << endl;
+        return;
+    }
+
+    if (!outputFile.is_open()) {
+        cerr << "Error opening output file: " << outputFileName << endl;
+        return;
+    }
+
+    string line;
+    int fractureId = -1;
+    int numVertices = 0;
+
+    for (int i = 0; i < 2; ++i) {
+        if (!getline(inputFile, line)) {
+            cerr << "Unexpected end of file while skipping initial lines." << endl;
+            return;
+        }
+    }
+
+    while (getline(inputFile, line)) {
+        // COntrollo sulla linea di header che indica fractureID e numero di vertici
+        if (line.find("# FractureId; NumVertices") != string::npos) {
+            if (!getline(inputFile, line)) {
+                cerr << "Unexpected end of file after FractureId; NumVertices line." << endl;
+                break;
+            }
+            stringstream ss(line);
+            string id, num;
+            getline(ss, id, ';');
+            getline(ss, num, ';');
+            try {
+                fractureId = stoi(id);
+                numVertices = stoi(num);
+            } catch (const invalid_argument& e) {
+                cerr << "Invalid number format in FractureId or NumVertices: " << e.what() << endl;
+                continue;
+            }
+        } else if (line.find("# Vertices") != string::npos) {
+            // Legge i vertici
+            vector<vector<double>> coordinates(3, vector<double>(numVertices, 0.0));
+            for (int i = 0; i < 3; ++i) {
+                if (!getline(inputFile, line)) {
+                    cerr << "Unexpected end of file while reading vertices." << endl;
+                    break;
+                }
+                stringstream ss(line);
+                string coord;
+                for (int j = 0; j < numVertices; ++j) {
+                    if (!getline(ss, coord, ';')) {
+                        cerr << "Not enough coordinates in line for vertex data." << endl;
+                        break;
+                    }
+                    try {
+                        coordinates[i][j] = stod(coord);
+                    } catch (const invalid_argument& e) {
+                        cerr << "Invalid number format in vertex coordinates (" << coord << "): " << e.what() << endl;
+                        coordinates[i][j] = 0.0;  // Inserisce un valore arbitrario per evitare problemi
+                    }
+                }
+            }
+
+            // Traspone la matrice
+            for (int j = 0; j < numVertices; ++j) {
+                Vertex vertex = {fractureId, coordinates[0][j], coordinates[1][j], coordinates[2][j]};
+                outputFile << vertex.fractureId << ", "
+                           << scientific << setprecision(16) << vertex.x << ", "
+                           << scientific << setprecision(16) << vertex.y << ", "
+                           << scientific << setprecision(16) << vertex.z << endl;
+            }
+        } else {
+            // Ignora le linee che non corrispondono correttamente
+            cerr << "Skipping unrecognized line: " << line << endl;
+        }
+    }
+
+    inputFile.close();
+    outputFile.close();
+}
 
 
 // Questa funzione svuota tutti gli elementi all'interno della struttura DiscreteFractureNetwork
@@ -468,21 +557,21 @@ double PointDistance(Vector3d P, Vector3d Q){
 }
 
 
-bool TraceReorder(const DiscreteFractureNetwork fracture, Traces& trace){
-    for(unsigned int i = 0; i < fracture.numFracture; i++){
-        for(unsigned int j = 0; j < trace.numTraces; j++){
-            if(trace.fractureId[i][0] = Id0){
-                size_t position = trace.fractureId.find(trace.fractureId[i]);   //Cerchiamo la posizione del vettore che contiene l'Id
-            }
-            else if(trace.fractureId[i][1] = Id1){
+// bool TraceReorder(const DiscreteFractureNetwork& fracture, Traces& trace){
+//     for(unsigned int i = 0; i < fracture.numFracture; i++){
+//         for(unsigned int j = 0; j < trace.numTraces; j++){
+//             if(trace.fractureId[i][0] = Id0){
+//                 size_t position = trace.fractureId.find(trace.fractureId[i]);   //Cerchiamo la posizione del vettore che contiene l'Id
+//             }
+//             else if(trace.fractureId[i][1] = Id1){
 
-            }
-        }
+//             }
+//         }
 
-    }
+//     }
 
-    return true;
-}
+//     return true;
+// }
 
 
 bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
@@ -566,14 +655,14 @@ bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
 }
 
 
-        if(c > a && c < b && b < d)
-            SaveTraces(c, b, point, s, trace, Id1, Id2);
+        // if(c > a && c < b && b < d)
+        //     SaveTraces(c, b, point, s, trace, Id1, Id2);
 
 
-double PointDistance(Vector3d P, Vector3d Q)
-{
-    return sqrt(((P[0]-Q[0]) * (P[0] - Q[0])) + ((P[1] - Q[1]) * (P[1] - Q[1])) + ((P[2] - Q[2]) * (P[2] - Q[2])));
-}
+// double PointDistance(Vector3d P, Vector3d Q)
+// {
+//     return sqrt(((P[0]-Q[0]) * (P[0] - Q[0])) + ((P[1] - Q[1]) * (P[1] - Q[1])) + ((P[2] - Q[2]) * (P[2] - Q[2])));
+// }
 
 
 bool reordering(vector<unsigned int>& idTraces, vector<double>& length)
@@ -931,7 +1020,6 @@ vector<tuple<Vector3d, unsigned int, unsigned int>> intersectTraces(FractureNetw
     }
     return traceIntersection;
 }
-
 
 
 }
