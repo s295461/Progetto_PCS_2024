@@ -20,7 +20,6 @@ int main()
     Cell0D Cell0D;
     Cell1D Cell1D;
     Cell2D Cell2D;
->
     string filePathInput = "DFN";
     string filePathOutput = "Result";
 
