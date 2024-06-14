@@ -7,7 +7,7 @@ using namespace std;
 
 namespace FractureNetwork {
 
-bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered, const string fileNameOutputParaview,
+bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered,
                     const string filePathInput, const string filePathOutput, DiscreteFractureNetwork& fracture, Traces& trace);
 
 void clearDiscreteFractureNetwork(DiscreteFractureNetwork& fracture);
@@ -50,7 +50,6 @@ bool reordering(vector<unsigned int>& idTraces, vector<double>& length);
 
 bool printTraces(const string fileName, const string filePath, Traces trace, DiscreteFractureNetwork fracture);
 
-void rewriteData(const string& inputFileName, const string& outputFileName);
 
 }
 

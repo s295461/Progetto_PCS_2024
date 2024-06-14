@@ -1,5 +1,7 @@
 list(APPEND src_paraview_headers ${CMAKE_CURRENT_SOURCE_DIR}/UCDUtilities.hpp)
 list(APPEND src_paraview_sources ${CMAKE_CURRENT_SOURCE_DIR}/UCDUtilities.cpp)
+list(APPEND src_paraview_sources ${CMAKE_CURRENT_SOURCE_DIR}/UtilsParaview.hpp)
+list(APPEND src_paraview_sources ${CMAKE_CURRENT_SOURCE_DIR}/UtilsParaview.cpp)
 
 list(APPEND src_paraview_includes ${CMAKE_CURRENT_SOURCE_DIR})
 
