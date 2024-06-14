@@ -1,0 +1,81 @@
+@startuml
+title DFN
+
+package FractureNetwork <<Folder>> {
+    struct DiscreteFractureNetwork {
+        + numFracture: unsigned int
+        + fractureID:std::vector<unsigned int>
+        + NumVertices: std::vector<unsigned int>
+        + vertices: std::vector<MatrixXd>
+    }
+
+    struct Traces {
+        + numTraces: unsigned int
+        + traceId: std::vector<unsigned int>
+        + fractureId: std::vector<Vector2i>
+        + coordinates: std::vector<MatrixXd>
+        + length: std::vector<double>
+        + traceReordered: std::vector<std::vector<std::tuple<unsigned int, bool, double>>>
+    }
+}
+
+package PolygonalMesh <<Folder>> {
+
+    struct Cell0D {
+        + numCell: unsigned int  
+        + cellId: std::vector<unsigned int> 
+        + coordinates: std::vector<Vector3d>
+    }
+
+    struct Cell1D {
+        + numCell: unsigned int  
+        + cellId: std::vector<unsigned int> 
+        + verticesId: std::vector<Vector2i>
+    }
+
+    struct Cell2D {
+        + numCell: unsigned int 
+        + numVertices: std::vector<unsigned int> 
+        + numEdges: std::vector<unsigned int> 
+        + verticesId: std::vector<std::list<unsigned int>> 
+        + edgesId: std::vector<std::list<unsigned int>> 
+    }
+}
+
+package GeometryLibrary <<Folder>> {
+
+    class Polygon {
+        + VerticesCoordinates : MatrixXd
+        + listVertices : std::vector<std::vector<unsigned int>>
+        + Polygon()
+        + Polygon(VerticesCoordinates, listVertices)
+        + void GedimInterface(vector<vector<unsigned int>>& triangles, VectorXi& materials)
+        + vector<double> computePolygonsArea()
+        + vector<vector<vector<unsigned int>>> TriangulatePolygons()
+        .. Non member function ..
+        void importPolygonsList(const string& filepath, Polygons& polygons)
+        .. TESTPOLYGON ..
+        TestComputePolygonsArea
+        TestGedimInterface
+    }
+
+    class Triangle {
+        + Vertices : Matrix3d
+        + Triangle(Vertices : Matrix3d)
+        + double ComputeArea()
+        .. TESTTRIANGLE ..
+        TestComputeArea
+    }
+
+    Polygon "1" o-left- "many" Triangle : is made up of
+}
+
+package Gedim <<Frame>> {
+}
+
+Polygon::GedimInterface --right--> Gedim
+
+note "This is an external package" as GedimNote
+GedimNote .. Gedim
+
+@enduml

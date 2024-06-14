@@ -4,7 +4,6 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
-#include <DiscreteFractureNetwork.hpp>
 #include <UCDUtilities.hpp>
 #include <Eigen/Eigen>
 
