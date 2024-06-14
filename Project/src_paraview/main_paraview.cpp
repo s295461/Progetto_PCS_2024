@@ -22,7 +22,7 @@ int main(){
     std::vector<std::vector<unsigned int>> triangles;
     Eigen::VectorXi materials;
     polygons.GedimInterface(triangles, materials);
-    exporter.ExportPolygons("C:/Users/davep/OneDrive/Desktop/Progetto_PCS_2024/Export_Paraview/FR200_paraview.inp",
+    exporter.ExportPolygons("C:/Users/davep/OneDrive/Desktop/Progetto_PCS_2024/Project/Export_Paraview/FR200_paraview.inp",
                             polygons.VerticesCoordinates,
                             triangles,
                             {},
