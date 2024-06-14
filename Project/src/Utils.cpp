@@ -13,7 +13,7 @@ using namespace std;
 namespace FractureNetwork {
 
 
-bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered, const string fileNameOutputParaview,
+bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered,
                     const string filePathInput, const string filePathOutput , DiscreteFractureNetwork& fracture, Traces& trace)
 {
     if(!PrintOnFile(fileNameInput, filePathInput, trace))
@@ -34,11 +34,6 @@ bool ImportFracture(const string fileNameInput, const string fileNameOutput, con
         return false;
     }
 
-    if(!PrintOnFile(fileNameOutputParaview, filePathInput, trace))
-    {
-        cerr << "Something wrong while printing the result in a file" << endl;
-        return false;
-    }
 
     if(!TraceReorder(fracture, trace))
     {
@@ -87,8 +82,10 @@ void rewriteData(const string& inputFileName, const string& outputFileName) {
         }
     }
 
+    outputFile << "FractureID, X, Y, Z" << endl;
+
     while (getline(inputFile, line)) {
-        // COntrollo sulla linea di header che indica fractureID e numero di vertici
+        // Controllo sulla linea di header che indica fractureID e numero di vertici
         if (line.find("# FractureId; NumVertices") != string::npos) {
             if (!getline(inputFile, line)) {
                 cerr << "Unexpected end of file after FractureId; NumVertices line." << endl;
