@@ -50,7 +50,6 @@ bool reordering(vector<unsigned int>& idTraces, vector<double>& length);
 
 bool printTraces(const string fileName, const string filePath, Traces trace, DiscreteFractureNetwork fracture);
 
-void rewriteData(const string& inputFileName, const string& outputFileName);
 
 }
 
