@@ -57,7 +57,91 @@ bool ImportFracture(const string fileNameInput, const string fileNameOutput, con
 
 
 
+void rewriteData(const string& inputFileName, const string& outputFileName) {
+    ifstream inputFile(inputFileName);
+    ofstream outputFile(outputFileName);
 
+    if (!inputFile.is_open()) {
+    cerr << "Error opening input file: " << inputFileName << endl;
+    cerr << "Failed to open input file. Error code: " << errno << endl;
+    return;
+    }
+
+    if (!outputFile.is_open()) {
+    cerr << "Error opening output file: " << outputFileName << endl;
+    return;
+    }
+
+    string line;
+    int fractureId = -1;
+    int numVertices = 0;
+
+    for (int i = 0; i < 2; ++i) {
+    if (!getline(inputFile, line)) {
+        cerr << "Unexpected end of file while skipping initial lines." << endl;
+        return;
+    }
+    }
+
+    while (getline(inputFile, line)) {
+    // COntrollo sulla linea di header che indica fractureID e numero di vertici
+    if (line.find("# FractureId; NumVertices") != string::npos) {
+        if (!getline(inputFile, line)) {
+            cerr << "Unexpected end of file after FractureId; NumVertices line." << endl;
+            break;
+        }
+        stringstream ss(line);
+        string id, num;
+        getline(ss, id, ';');
+        getline(ss, num, ';');
+        try {
+            fractureId = stoi(id);
+            numVertices = stoi(num);
+        } catch (const invalid_argument& e) {
+            cerr << "Invalid number format in FractureId or NumVertices: " << e.what() << endl;
+            continue;
+        }
+    } else if (line.find("# Vertices") != string::npos) {
+        // Legge i vertici
+        vector<vector<double>> coordinates(3, vector<double>(numVertices, 0.0));
+        for (int i = 0; i < 3; ++i) {
+            if (!getline(inputFile, line)) {
+                cerr << "Unexpected end of file while reading vertices." << endl;
+                break;
+            }
+            stringstream ss(line);
+            string coord;
+            for (int j = 0; j < numVertices; ++j) {
+                if (!getline(ss, coord, ';')) {
+                    cerr << "Not enough coordinates in line for vertex data." << endl;
+                    break;
+                }
+                try {
+                    coordinates[i][j] = stod(coord);
+                } catch (const invalid_argument& e) {
+                    cerr << "Invalid number format in vertex coordinates (" << coord << "): " << e.what() << endl;
+                    coordinates[i][j] = 0.0;  // Inserisce un valore arbitrario per evitare problemi
+                }
+            }
+        }
+
+        // Traspone la matrice
+        for (int j = 0; j < numVertices; ++j) {
+            Vertex vertex = {fractureId, coordinates[0][j], coordinates[1][j], coordinates[2][j]};
+            outputFile << vertex.fractureId << ", "
+                       << scientific << setprecision(16) << vertex.x << ", "
+                       << scientific << setprecision(16) << vertex.y << ", "
+                       << scientific << setprecision(16) << vertex.z << endl;
+        }
+    } else {
+        // Ignora le linee che non corrispondono correttamente
+        cerr << "Skipping unrecognized line: " << line << endl;
+    }
+    }
+
+    inputFile.close();
+    outputFile.close();
+}
 
 // Questa funzione svuota tutti gli elementi all'interno della struttura DiscreteFractureNetwork
 void clearDiscreteFractureNetwork(DiscreteFractureNetwork& fracture)
