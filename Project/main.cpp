@@ -20,6 +20,7 @@ int main()
     Cell0D Cell0D;
     Cell1D Cell1D;
     Cell2D Cell2D;
+
     string filePathInput = "DFN";
     string filePathOutput = "Result";
 
@@ -27,6 +28,8 @@ int main()
     string fileNameFR3 = "/FR3_data.txt";
     string fileNameOutputFR3 = "/FR3_traces.txt";
     string fileNameOutputReorderedFR3 = "/FR3_traces_reordered.txt";
+
+
 
     if(!ImportFracture(fileNameFR3, fileNameOutputFR3, fileNameOutputReorderedFR3, filePathInput, filePathOutput, fracture, trace))
         return 1;
@@ -44,6 +47,7 @@ int main()
     string fileNameFR10 = "/FR10_data.txt";
     string fileNameOutputFR10 = "/FR10_traces.txt";
     string fileNameOutputReorderedFR10 = "/FR10_traces_reordered.txt";
+
     if(!ImportFracture(fileNameFR10, fileNameOutputFR10, fileNameOutputReorderedFR10, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
@@ -59,9 +63,9 @@ int main()
     string fileNameFR50 = "/FR50_data.txt";
     string fileNameOutputFR50 = "/FR50_traces.txt";
     string fileNameOutputReorderedFR50 = "/FR50_traces_reordered.txt";
+
     if(!ImportFracture(fileNameFR50, fileNameOutputFR50, fileNameOutputReorderedFR50, filePathInput, filePathOutput, fracture, trace))
         return 1;
-
 
 
     clearDiscreteFractureNetwork(fracture);
@@ -73,6 +77,7 @@ int main()
     string fileNameFR82 = "/FR82_data.txt";
     string fileNameOutputFR82 = "/FR82_traces.txt";
     string fileNameOutputReorderedFR82 = "/FR82_traces_reordered.txt";
+
     if(!ImportFracture(fileNameFR82, fileNameOutputFR82, fileNameOutputReorderedFR82, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
@@ -90,8 +95,6 @@ int main()
         return 1;
 
 
-
-
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
 
@@ -106,10 +109,11 @@ int main()
     if(!ImportFracture(fileNameFR362, fileNameOutputFR362, fileNameOutputReorderedFR362, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
-
-
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
 
     return 0;
+
+
+
 }

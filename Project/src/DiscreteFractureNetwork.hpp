@@ -38,12 +38,9 @@ struct Traces
     vector<Vector2i> fractureId = {};
     vector<MatrixXd> coordinates = {};
 
-
-
     vector<double> length = {};
     vector<vector<tuple<unsigned int, bool, double>>> traceReordered;
 };
-
 
 
 }

@@ -6,17 +6,17 @@
 #include <cmath>
 #include <algorithm>
 #include <tuple>
-
+#include <string>
+#include <cerrno>
 using namespace std;
 
 namespace FractureNetwork {
 
 
-
-
-bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered, const string filePathInput, const string filePathOutput, DiscreteFractureNetwork& fracture, Traces& trace)
+bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered,
+                    const string filePathInput, const string filePathOutput , DiscreteFractureNetwork& fracture, Traces& trace)
 {
-    if (!ReadFracture(filePathInput, fileNameInput, fracture))
+    if(!PrintOnFile(fileNameInput, filePathInput, trace))
     {
         cerr << "Something wrong with the reading of the fracture" << endl;
         return false;
@@ -54,8 +54,6 @@ bool ImportFracture(const string fileNameInput, const string fileNameOutput, con
 
     return true;
 }
-
-
 
 
 
@@ -463,6 +461,26 @@ bool PrintOnFile(const string fileName, const string filePath, Traces trace)
     return true;
 }
 
+double PointDistance(Vector3d P, Vector3d Q){
+    return sqrt(((P[0]-Q[0])*(P[0]-Q[0])+((P[1]-Q[1])*(P[1]-Q[1]))+((P[2]-Q[2])*(P[2]-Q[2]))));
+}
+
+
+// bool TraceReorder(const DiscreteFractureNetwork& fracture, Traces& trace){
+//     for(unsigned int i = 0; i < fracture.numFracture; i++){
+//         for(unsigned int j = 0; j < trace.numTraces; j++){
+//             if(trace.fractureId[i][0] = Id0){
+//                 size_t position = trace.fractureId.find(trace.fractureId[i]);   //Cerchiamo la posizione del vettore che contiene l'Id
+//             }
+//             else if(trace.fractureId[i][1] = Id1){
+
+//             }
+//         }
+
+//     }
+
+//     return true;
+// }
 
 
 bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
@@ -546,12 +564,15 @@ bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
 }
 
 
+        // if(c > a && c < b && b < d)
+        //     SaveTraces(c, b, point, s, trace, Id1, Id2);
 
 
-double PointDistance(Vector3d P, Vector3d Q)
-{
-    return sqrt(((P[0]-Q[0]) * (P[0] - Q[0])) + ((P[1] - Q[1]) * (P[1] - Q[1])) + ((P[2] - Q[2]) * (P[2] - Q[2])));
-}
+
+// double PointDistance(Vector3d P, Vector3d Q)
+// {
+//     return sqrt(((P[0]-Q[0]) * (P[0] - Q[0])) + ((P[1] - Q[1]) * (P[1] - Q[1])) + ((P[2] - Q[2]) * (P[2] - Q[2])));
+// }
 
 
 bool reordering(vector<unsigned int>& idTraces, vector<double>& length)
@@ -909,7 +930,6 @@ vector<tuple<Vector3d, unsigned int, unsigned int>> intersectTraces(FractureNetw
     }
     return traceIntersection;
 }
-
 
 
 }
