@@ -28,7 +28,7 @@ int main()
     string fileNameFR3 = "/FR3_data.txt";
     string fileNameOutputFR3 = "/FR3_traces.txt";
     string fileNameOutputReorderedFR3 = "/FR3_traces_reordered.txt";
-    string fileNameOutputParaviewFR3 = "/FR3_paraview.txt";
+
 
 
     if(!ImportFracture(fileNameFR3, fileNameOutputFR3, fileNameOutputReorderedFR3, filePathInput, filePathOutput, fracture, trace))
@@ -37,7 +37,6 @@ int main()
     if(!fractureCut(fracture, trace, Cell0D, Cell1D, Cell2D))
         return 1;
 
-    rewriteData(fileNameFR3,fileNameOutputParaviewFR3);
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
 
@@ -48,13 +47,12 @@ int main()
     string fileNameFR10 = "/FR10_data.txt";
     string fileNameOutputFR10 = "/FR10_traces.txt";
     string fileNameOutputReorderedFR10 = "/FR10_traces_reordered.txt";
-    string fileNameOutputParaviewFR10 = "/FR10_paraview.txt";
+
     if(!ImportFracture(fileNameFR10, fileNameOutputFR10, fileNameOutputReorderedFR10, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
     // if(!fractureCut(fracture, trace, Cell0D, Cell1D, Cell2D))
     //     return 1;
-    rewriteData(fileNameFR10,fileNameOutputParaviewFR10);
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
@@ -65,12 +63,10 @@ int main()
     string fileNameFR50 = "/FR50_data.txt";
     string fileNameOutputFR50 = "/FR50_traces.txt";
     string fileNameOutputReorderedFR50 = "/FR50_traces_reordered.txt";
-    string fileNameOutputParaviewFR50 = "/FR50_paraview.txt";
+
     if(!ImportFracture(fileNameFR50, fileNameOutputFR50, fileNameOutputReorderedFR50, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
-
-    rewriteData(fileNameFR50,fileNameOutputParaviewFR50);
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
@@ -81,11 +77,10 @@ int main()
     string fileNameFR82 = "/FR82_data.txt";
     string fileNameOutputFR82 = "/FR82_traces.txt";
     string fileNameOutputReorderedFR82 = "/FR82_traces_reordered.txt";
-    string fileNameOutputParaviewFR82 = "/FR82_paraview.txt";
+
     if(!ImportFracture(fileNameFR82, fileNameOutputFR82, fileNameOutputReorderedFR82, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
-    rewriteData(fileNameFR82,fileNameOutputParaviewFR82);
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
@@ -96,11 +91,8 @@ int main()
     string fileNameFR200 = "/FR200_data.txt";
     string fileNameOutputFR200 = "/FR200_traces.txt";
     string fileNameOutputReorderedFR200 = "/FR200_traces_reordered.txt";
-    string fileNameOutputParaviewFR200 = "/FR200_paraview.txt";
     if(!ImportFracture(fileNameFR200, fileNameOutputFR200, fileNameOutputReorderedFR200, filePathInput, filePathOutput, fracture, trace))
         return 1;
-
-    rewriteData(fileNameFR200,fileNameOutputParaviewFR200);
 
 
     clearDiscreteFractureNetwork(fracture);
@@ -114,11 +106,8 @@ int main()
     string fileNameFR362 = "/FR362_data.txt";
     string fileNameOutputFR362 = "/FR362_traces.txt";
     string fileNameOutputReorderedFR362 = "/FR362_traces_reordered.txt";
-    string fileNameOutputParaviewFR362 = "/FR362_paraview.txt";
     if(!ImportFracture(fileNameFR362, fileNameOutputFR362, fileNameOutputReorderedFR362, filePathInput, filePathOutput, fracture, trace))
         return 1;
-
-    rewriteData(fileNameFR362,fileNameOutputParaviewFR362);
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
