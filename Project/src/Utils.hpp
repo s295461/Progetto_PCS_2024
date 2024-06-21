@@ -59,10 +59,14 @@ bool fractureCut(FractureNetwork::DiscreteFractureNetwork& fracture, FractureNet
 
 bool createSubfracture(vector<Vector3d> subfracture, vector<Vector3d> cuttingTrace, vector<vector<Vector3d>>& subfractureVertices);
 
-vector<Vector3d> extendTraces(MatrixXd fractureVertices, MatrixXd verticesTrace);
+vector<Vector3d> extendTraces(vector<Vector3d> subFractureVertices, vector<Vector3d> subTraceVertices);
 
 // vector<Vector3d> intersectTraces(FractureNetwork::Traces trace, unsigned int idTrace, unsigned int idFracture);
 
-vector<tuple<Vector3d, unsigned int, unsigned int>> intersectTraces(FractureNetwork::Traces trace, unsigned int idFracture);
+// vector<tuple<Vector3d, unsigned int, unsigned int>> intersectTraces(FractureNetwork::Traces trace, unsigned int idFracture);
+
+// bool notPassingCut(vector<vector<Vector3d>>& subfractureVertices, FractureNetwork::Traces trace, unsigned int traceId, vector<tuple<Vector3d, unsigned int, unsigned int>> tracesIntersection, vector<vector<Vector3d>>& subfractureVertices1);
+
+// bool pointInsidePolygon(vector<Vector3d> subFracture, Vector3d point);
 
 }

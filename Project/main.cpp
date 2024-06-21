@@ -34,8 +34,8 @@ int main()
     if(!ImportFracture(fileNameFR3, fileNameOutputFR3, fileNameOutputReorderedFR3, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
-    if(!fractureCut(fracture, trace, Cell0D, Cell1D, Cell2D))
-        return 1;
+    // if(!fractureCut(fracture, trace, Cell0D, Cell1D, Cell2D))
+    //     return 1;
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
@@ -67,6 +67,9 @@ int main()
     if(!ImportFracture(fileNameFR50, fileNameOutputFR50, fileNameOutputReorderedFR50, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
+    // if(!fractureCut(fracture, trace, Cell0D, Cell1D, Cell2D))
+    //     return 1;
+
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
@@ -81,6 +84,8 @@ int main()
     if(!ImportFracture(fileNameFR82, fileNameOutputFR82, fileNameOutputReorderedFR82, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
+    // if(!fractureCut(fracture, trace, Cell0D, Cell1D, Cell2D))
+    //     return 1;
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
@@ -94,6 +99,8 @@ int main()
     if(!ImportFracture(fileNameFR200, fileNameOutputFR200, fileNameOutputReorderedFR200, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
+    // if(!fractureCut(fracture, trace, Cell0D, Cell1D, Cell2D))
+    //     return 1;
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
@@ -108,6 +115,9 @@ int main()
     string fileNameOutputReorderedFR362 = "/FR362_traces_reordered.txt";
     if(!ImportFracture(fileNameFR362, fileNameOutputFR362, fileNameOutputReorderedFR362, filePathInput, filePathOutput, fracture, trace))
         return 1;
+
+  // if(!fractureCut(fracture, trace, Cell0D, Cell1D, Cell2D))
+    //     return 1;
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
