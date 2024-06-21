@@ -39,6 +39,10 @@ list(APPEND DFN_LINKED_LIBRARIES PRIVATE GTest::gmock_main)
 # Insert Sources
 ################################################################################
 
+cmake_minimum_required(VERSION 3.10)
+project(MyProject)
+
+# Aggiunta delle sottodirectory
 add_subdirectory(src)
 list(APPEND DFN_sources ${src_sources})
 list(APPEND DFN_headers ${src_headers})
@@ -49,30 +53,33 @@ list(APPEND DFN_TEST_sources ${src_test_sources})
 list(APPEND DFN_TEST_headers ${src_test_headers})
 list(APPEND DFN_TEST_includes ${src_test_includes})
 
-add_subdirectory(TestingParaview/Code/src)
-list(APPEND DFN_sources ${src_paraview_sources})
-list(APPEND DFN_headers ${src_paraview_headers})
-list(APPEND DFN_includes ${src_paraview_includes})
+add_subdirectory(src_paraview)
+list(APPEND DFN_PARAVIEW_sources ${src_paraview_sources})
+list(APPEND DFN_PARAVIEW_headers ${src_paraview_headers})
+list(APPEND DFN_PARAVIEW_includes ${src_paraview_includes})
 
-
-
-
-#Add file
-################################################################################
+# Copia dei file
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/DFN DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-# Create executable
-################################################################################
+# Creazione degli eseguibili
 add_executable(DFN main.cpp ${DFN_sources} ${DFN_headers})
-
 add_executable(DFN_TEST main_test.cpp ${DFN_sources} ${DFN_headers} ${DFN_TEST_sources} ${DFN_TEST_headers})
+add_executable(DFN_PARAVIEW ${CMAKE_SOURCE_DIR}/src_paraview/main_paraview.cpp ${src_paraview_sources} ${src_paraview_headers})
 
 
+# Collegamento delle librerie e delle directory di inclusione
 target_link_libraries(DFN ${DFN_LINKED_LIBRARIES})
 target_include_directories(DFN PUBLIC ${DFN_includes})
 target_compile_options(DFN PUBLIC -fPIC)
 
-target_include_directories(DFN_TEST PUBLIC ${DFN_includes} ${DFN_TEST_includes})
 target_link_libraries(DFN_TEST ${DFN_LINKED_LIBRARIES})
+target_include_directories(DFN_TEST PUBLIC ${DFN_includes} ${DFN_TEST_includes})
 target_compile_options(DFN_TEST PUBLIC -fPIC)
+
+target_link_libraries(DFN_PARAVIEW ${DFN_LINKED_LIBRARIES})
+target_include_directories(DFN_PARAVIEW PUBLIC ${DFN_includes} ${src_paraview_includes})
+target_compile_options(DFN_PARAVIEW PUBLIC -fPIC)
+
+
+
 

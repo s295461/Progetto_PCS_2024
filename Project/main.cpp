@@ -8,15 +8,19 @@
 using namespace std;
 using namespace Eigen;
 using namespace FractureNetwork;
+
 using namespace PolygonalMesh;
+
 
 int main()
 {
     DiscreteFractureNetwork fracture;
     Traces trace;
+
     Cell0D Cell0D;
     Cell1D Cell1D;
     Cell2D Cell2D;
+
     string filePathInput = "DFN";
     string filePathOutput = "Result";
 
@@ -24,6 +28,8 @@ int main()
     string fileNameFR3 = "/FR3_data.txt";
     string fileNameOutputFR3 = "/FR3_traces.txt";
     string fileNameOutputReorderedFR3 = "/FR3_traces_reordered.txt";
+
+
 
     if(!ImportFracture(fileNameFR3, fileNameOutputFR3, fileNameOutputReorderedFR3, filePathInput, filePathOutput, fracture, trace))
         return 1;
@@ -33,6 +39,7 @@ int main()
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
+
 
 
 
@@ -56,11 +63,13 @@ int main()
     string fileNameFR50 = "/FR50_data.txt";
     string fileNameOutputFR50 = "/FR50_traces.txt";
     string fileNameOutputReorderedFR50 = "/FR50_traces_reordered.txt";
+
     if(!ImportFracture(fileNameFR50, fileNameOutputFR50, fileNameOutputReorderedFR50, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
     // if(!fractureCut(fracture, trace, Cell0D, Cell1D, Cell2D))
     //     return 1;
+
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
@@ -71,6 +80,7 @@ int main()
     string fileNameFR82 = "/FR82_data.txt";
     string fileNameOutputFR82 = "/FR82_traces.txt";
     string fileNameOutputReorderedFR82 = "/FR82_traces_reordered.txt";
+
     if(!ImportFracture(fileNameFR82, fileNameOutputFR82, fileNameOutputReorderedFR82, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
@@ -97,6 +107,8 @@ int main()
 
 
 
+
+
     /// FR362
     string fileNameFR362 = "/FR362_data.txt";
     string fileNameOutputFR362 = "/FR362_traces.txt";
@@ -104,11 +116,14 @@ int main()
     if(!ImportFracture(fileNameFR362, fileNameOutputFR362, fileNameOutputReorderedFR362, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
-    // if(!fractureCut(fracture, trace, Cell0D, Cell1D, Cell2D))
+  // if(!fractureCut(fracture, trace, Cell0D, Cell1D, Cell2D))
     //     return 1;
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
 
     return 0;
+
+
+
 }
