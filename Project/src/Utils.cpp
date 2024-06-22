@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <tuple>
 #include <string>
-#include <cerrno>
+
 using namespace std;
 
 namespace FractureNetwork {
@@ -16,7 +16,7 @@ namespace FractureNetwork {
 bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered,
                     const string filePathInput, const string filePathOutput , DiscreteFractureNetwork& fracture, Traces& trace)
 {
-    if(!PrintOnFile(fileNameInput, filePathInput, trace))
+    if(!ReadFracture(filePathInput, fileNameInput, fracture))
     {
         cerr << "Something wrong with the reading of the fracture" << endl;
         return false;
@@ -40,9 +40,6 @@ bool ImportFracture(const string fileNameInput, const string fileNameOutput, con
         cerr << "Something wrong while reordering traces" << endl;
         return false;
     }
-
-
-    if(!printTraces(fileNameOutputReordered, filePathOutput, trace, fracture))
 
 
     if(!printTraces(fileNameOutputReordered, filePathOutput, trace, fracture))
@@ -202,9 +199,6 @@ BoundingBox BBox3D(const MatrixXd& vertices)
         bbox.min = bbox.min.cwiseMin(vertices.col(i));
         bbox.max = bbox.max.cwiseMax(vertices.col(i));
     }
-
-
-
     return bbox;
 }
 
@@ -295,7 +289,6 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
     vector<Vector3d> Point1;
     vector<Vector3d> Point2;
 
-
     double tol = 1e-10;
 
     // Nel ciclo while prendo ogni volta un segmento della prima e un segmento della seconda frattura
@@ -327,7 +320,6 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
             double u2;
             t2 = ((P2.cross(v2) - point.cross(v2)).dot(s.cross(v2))) / (((s.cross(v2)).norm())*((s.cross(v2)).norm()));
             u2 = ((point.cross(s) - P2.cross(s)).dot(v2.cross(s))) / (((v2.cross(s)).norm())*((v2.cross(s)).norm()));
-
 
             Vector3d intersection1 = point + t1 * s;
             Vector3d verify1 = P1 + u1 * v1;
@@ -457,23 +449,6 @@ double PointDistance(Vector3d P, Vector3d Q){
 }
 
 
-// bool TraceReorder(const DiscreteFractureNetwork& fracture, Traces& trace){
-//     for(unsigned int i = 0; i < fracture.numFracture; i++){
-//         for(unsigned int j = 0; j < trace.numTraces; j++){
-//             if(trace.fractureId[i][0] = Id0){
-//                 size_t position = trace.fractureId.find(trace.fractureId[i]);   //Cerchiamo la posizione del vettore che contiene l'Id
-//             }
-//             else if(trace.fractureId[i][1] = Id1){
-
-//             }
-//         }
-
-//     }
-
-//     return true;
-// }
-
-
 bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
 
 {
@@ -555,16 +530,6 @@ bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
 }
 
 
-        // if(c > a && c < b && b < d)
-        //     SaveTraces(c, b, point, s, trace, Id1, Id2);
-
-
-// double PointDistance(Vector3d P, Vector3d Q)
-// {
-//     return sqrt(((P[0]-Q[0]) * (P[0] - Q[0])) + ((P[1] - Q[1]) * (P[1] - Q[1])) + ((P[2] - Q[2]) * (P[2] - Q[2])));
-// }
-
-
 bool reordering(vector<unsigned int>& idTraces, vector<double>& length)
 {
     if(idTraces.size() != length.size())
@@ -596,7 +561,6 @@ bool printTraces(const string fileName, const string filePath, Traces trace, Dis
         cerr << "Error opening the file" << endl;
         return false;
     }
-
 
     for(unsigned int i = 0; i < fracture.numFracture; i++)
     {
