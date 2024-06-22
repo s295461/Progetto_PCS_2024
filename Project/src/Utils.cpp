@@ -634,6 +634,9 @@ bool fractureCut(FractureNetwork::DiscreteFractureNetwork& fracture, FractureNet
             {
                 // Prendo le coordinate della sottofrattura da tagliare
                 vector<Vector3d> fractureCoord = get<0>(subFracture[n]);
+                // Verifico che la sottofrattura che sto considerando ha dei vertici
+                if(fractureCoord.size() == 0)
+                    continue;
                 // Calcolo la normale alla frattura, mi servirà dopo
                 Vector3d normal = (fractureCoord[1] - fractureCoord[0]).cross(fractureCoord[2] - fractureCoord[1]);
                 // Prendo le informazioni sulle tracce che tagliano questa sottofrattura
@@ -731,7 +734,7 @@ bool fractureCut(FractureNetwork::DiscreteFractureNetwork& fracture, FractureNet
                             Vector3d intersection = traceCoord[0] + t * cuttingTrace;
                             Vector3d verify = get<0>(fractureTraces[s])[0] + u * vectorTrace;
                             // Se il punto di intersezione coincide con il punto di verifica, allora è corretto, lo salvo come punto di intersezione tra le due tracce
-                            if((intersection - verify).norm() < tol && t >= 0 && t <= 1) // POTREBBE ESSERE t E NON u !!!!!!!!!!!!!!!!!!!!!!
+                            if((intersection - verify).norm() < tol && t >= 0 && t <= 1)
                                 traceIntersection = intersection;
                             vector<Vector3d> newTraceDx = {traceIntersection, get<0>(fractureTraces[s])[1]};
                             pair<vector<Vector3d>,unsigned int> traceDx = make_pair(newTraceDx, traceId1);
@@ -753,7 +756,7 @@ bool fractureCut(FractureNetwork::DiscreteFractureNetwork& fracture, FractureNet
                             Vector3d intersection = traceCoord[0] + t * cuttingTrace;
                             Vector3d verify = get<0>(fractureTraces[s])[0] + u * vectorTrace;
                             // Se il punto di intersezione coincide con il punto di verifica, allora è corretto, lo salvo come punto di intersezione tra le due tracce
-                            if((intersection - verify).norm() < tol && t >= 0 && t <= 1) // POTREBBE ESSERE t E NON u !!!!!!!!!!!!!!!!!!!!!!
+                            if((intersection - verify).norm() < tol && t >= 0 && t <= 1)
                                 traceIntersection = intersection;
                             vector<Vector3d> newTraceDx = {traceIntersection, get<0>(fractureTraces[s])[0]};
                             pair<vector<Vector3d>,unsigned int> traceDx = make_pair(newTraceDx, traceId1);
