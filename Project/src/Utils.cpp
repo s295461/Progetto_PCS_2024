@@ -1016,8 +1016,6 @@ bool createMesh(vector<pair<vector<Vector3d>, vector<pair<vector<Vector3d>, unsi
                 }
             }
 
-
-
             // Cell1D
             Vector2i vertices1D = {id1, id2};
             auto begin1D = mesh.verticesId1D.begin();
@@ -1058,7 +1056,6 @@ bool createMesh(vector<pair<vector<Vector3d>, vector<pair<vector<Vector3d>, unsi
         mesh.edgesId2D.push_back(edgesId);
         mesh.numEdges2D.push_back(edgesId.size());
     }
-
     mesh.numCell0D = mesh.cellId0D.size();
     mesh.numCell1D = mesh.cellId1D.size();
     mesh.numCell2D = mesh.cellId2D.size();
@@ -1066,127 +1063,6 @@ bool createMesh(vector<pair<vector<Vector3d>, vector<pair<vector<Vector3d>, unsi
     return true;
 }
 
-
-
-    // // Cell0D
-    // // Riservo lo spazio che mi può servire sovrastimandone la dimensione
-    // mesh.coordinates0D.reserve(3*subFracture.size());
-    // mesh.cellId0D.reserve(3*subFracture.size());
-
-    // unsigned int m = 0;
-    // // Per ogni sottofrattura
-    // for(unsigned int k = 0; k < subFracture.size(); k++)
-    // {
-    //     vector<Vector3d> polygon = get<0>(subFracture[k]);
-    //     // Considero un vertice alla volta
-    //     for(unsigned int h = 0; h < polygon.size(); h++)
-    //     {
-    //         // Verifico che questo vertice non sia già presente nella mesh
-    //         auto it = find(mesh.coordinates0D.begin(), mesh.coordinates0D.end(), polygon[h]);
-    //         if(it == mesh.coordinates0D.end())
-    //         {
-    //             mesh.coordinates0D.push_back(polygon[h]);
-    //             mesh.cellId0D.push_back(m);
-    //             m++;
-    //         }
-    //     }
-    // }
-    // mesh.numCell0D = mesh.coordinates0D.size();
-
-
-    // // Cell1D
-    // // Riservo lo spazio che mi può servire, sovrastimandone la dimensione
-    // mesh.cellId1D.reserve(4*subFracture.size());
-    // mesh.verticesId1D.reserve(4*subFracture.size());
-
-    // unsigned int counter = 0;
-    // for(unsigned int k = 0; k < subFracture.size(); k++)
-    // {
-    //     vector<Vector3d> polygon = get<0>(subFracture[k]);
-    //     for(unsigned int h = 0; h < polygon.size(); h++)
-    //     {
-    //         unsigned int t = (h+1) % polygon.size();
-    //         // Trovo gli id in Cell0D dei due punti che formano gli estremi del mio segmento
-    //         auto it1 = find(mesh.coordinates0D.begin(), mesh.coordinates0D.end(), polygon[h]);
-    //         auto it2 = find(mesh.coordinates0D.begin(), mesh.coordinates0D.end(), polygon[t]);
-    //         int id1 = distance(mesh.coordinates0D.begin(), it1);
-    //         int id2 = distance(mesh.coordinates0D.begin(), it2);
-
-    //         // // Ora voglio verificare che sul segmento non siano presenti altri punti che ho salvato in Cell0D, infatti in questo caso il lato è in realtà formato da due sotto-segmenti più piccoli
-    //         // // Un esempio di questa casistica è la frattura 0 del file FR3, dove ho un'intersezione delle due tracce "a T".
-    //         unsigned int flag = 0;
-    //         // Vector3d vec = mesh.coordinates0D[id2] - mesh.coordinates0D[id1];
-    //         // for(unsigned int p = 0; p < mesh.coordinates0D.size(); p++)
-    //         // {
-    //         //     Vector3d vec1 = mesh.coordinates0D[p] - mesh.coordinates0D[id1];
-    //         //     Vector3d vec2 = mesh.coordinates0D[p] - mesh.coordinates0D[id2];
-    //         //     if((vec.cross(vec1).norm()) < tol && vec.dot(vec1) > tol && (-vec).dot(vec2) > tol)
-    //         //     {
-    //         //         flag = 1;
-    //         //         continue;
-    //         //     }
-    //         // }
-    //         // Controllo che non ci siano doppioni, cioè che la coppia di id che voglio salvare non sia già presente nella mesh
-    //         for(unsigned int q = 0; q < mesh.verticesId1D.size(); q++)
-    //         {
-    //             if((id1 == mesh.verticesId1D[q][0] && id2 == mesh.verticesId1D[q][1]) || (id1 == mesh.verticesId1D[q][1] && id2 == mesh.verticesId1D[q][0]))
-    //             {
-    //                 flag = 1;
-    //                 continue;
-    //             }
-    //         }
-    //         // Se non è entrato nell'if qui sopra, dunque se non c'è un altro punto all'interno del mio segmento, allora lo posso salvare nella mesh
-    //         if(flag == 0)
-    //         {
-    //             Vector2i verticesId = {id1, id2};
-    //             mesh.verticesId1D.push_back(verticesId);
-    //             mesh.cellId1D.push_back(counter);
-    //             counter++;
-    //         }
-    //     }
-    // }
-    // mesh.numCell1D = mesh.verticesId1D.size();
-
-
-    // // Cell2D
-    // mesh.numCell2D = subFracture.size();
-    // mesh.cellId2D.reserve(mesh.numCell2D);
-    // mesh.numVertices2D.reserve(mesh.numCell2D);
-    // mesh.numEdges2D.reserve(mesh.numCell2D);
-    // mesh.verticesId2D.reserve(mesh.numCell2D);
-    // mesh.edgesId2D.reserve(mesh.numCell2D);
-
-    // for(unsigned int k = 0; k < mesh.numCell2D; k++)
-    // {
-    //     mesh.cellId2D.push_back(k);
-    //     vector<Vector3d> polygon = get<0>(subFracture[k]);
-    //     mesh.numVertices2D.push_back(polygon.size());
-    //     mesh.numEdges2D.push_back(polygon.size());
-    //     vector<unsigned int> idVertices;
-    //     vector<unsigned int> idEdges;
-
-    //     for(unsigned int h = 0; h < polygon.size(); h++)
-    //     {
-    //         unsigned int t = (h+1) % polygon.size();
-    //         // Trovo gli id in Cell0D dei due punti che formano gli estremi del mio segmento
-    //         auto it1 = find(mesh.coordinates0D.begin(), mesh.coordinates0D.end(), polygon[h]);
-    //         auto it2 = find(mesh.coordinates0D.begin(), mesh.coordinates0D.end(), polygon[t]);
-    //         int id1 = distance(mesh.coordinates0D.begin(), it1);
-    //         int id2 = distance(mesh.coordinates0D.begin(), it2);
-    //         idVertices.push_back(id1);
-    //         Vector2i vertices = {id1, id2};
-    //         auto it3 = find(mesh.verticesId1D.begin(), mesh.verticesId1D.end(), vertices);
-    //         if(it3 == mesh.verticesId1D.end() && vertices != mesh.verticesId1D.back())
-    //         {
-    //             vertices = {id2, id1};
-    //             it3 = find(mesh.verticesId1D.begin(), mesh.verticesId1D.end(), vertices);
-    //         }
-    //         int id3 = distance(mesh.verticesId1D.begin(), it3);
-    //         idEdges.push_back(id3);
-    //     }
-    //     mesh.verticesId2D.push_back(idVertices);
-    //     mesh.edgesId2D.push_back(idEdges);
-    // }
 
 
 
