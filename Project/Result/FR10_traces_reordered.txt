@@ -1,0 +1,90 @@
+# FractureId; NumTraces
+0; 7
+# TraceId; Tips; Length
+6; 0; 0.559234
+4; 1; 0.521346
+1; 1; 0.470326
+5; 1; 0.379163
+0; 1; 0.356181
+2; 1; 0.211132
+3; 1; 0.00437796
+
+# FractureId; NumTraces
+1; 2
+# TraceId; Tips; Length
+8; 1; 0.369138
+7; 1; 0.160471
+
+# FractureId; NumTraces
+2; 5
+# TraceId; Tips; Length
+11; 0; 0.63579
+10; 1; 0.933401
+0; 1; 0.356181
+12; 1; 0.321108
+9; 1; 0.222983
+
+# FractureId; NumTraces
+3; 7
+# TraceId; Tips; Length
+14; 0; 0.199847
+16; 1; 0.630802
+13; 1; 0.53782
+1; 1; 0.470326
+15; 1; 0.328172
+9; 1; 0.222983
+7; 1; 0.160471
+
+# FractureId; NumTraces
+4; 5
+# TraceId; Tips; Length
+18; 1; 0.661645
+13; 1; 0.53782
+8; 1; 0.369138
+2; 1; 0.211132
+17; 1; 0.110346
+
+# FractureId; NumTraces
+5; 3
+# TraceId; Tips; Length
+20; 1; 0.328181
+19; 1; 0.217705
+3; 1; 0.00437796
+
+# FractureId; NumTraces
+6; 5
+# TraceId; Tips; Length
+10; 1; 0.933401
+22; 1; 0.647404
+4; 1; 0.521346
+21; 1; 0.517898
+14; 1; 0.199847
+
+# FractureId; NumTraces
+7; 7
+# TraceId; Tips; Length
+23; 0; 0.193165
+11; 1; 0.63579
+24; 1; 0.520018
+21; 1; 0.517898
+5; 1; 0.379163
+15; 1; 0.328172
+17; 1; 0.110346
+
+# FractureId; NumTraces
+8; 6
+# TraceId; Tips; Length
+18; 1; 0.661645
+22; 1; 0.647404
+16; 1; 0.630802
+6; 1; 0.559234
+19; 1; 0.217705
+23; 1; 0.193165
+
+# FractureId; NumTraces
+9; 3
+# TraceId; Tips; Length
+24; 0; 0.520018
+20; 1; 0.328181
+12; 1; 0.321108
+

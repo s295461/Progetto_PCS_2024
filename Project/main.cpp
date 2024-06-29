@@ -92,8 +92,8 @@ int main()
     if(!ImportFracture(fileNameFR200, fileNameOutputFR200, fileNameOutputReorderedFR200, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
-    // if(!fractureCut(fracture, trace))
-    //     return 1;
+    if(!fractureCut(fracture, trace))
+        return 1;
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
