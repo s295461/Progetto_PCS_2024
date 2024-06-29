@@ -6,7 +6,6 @@
 using namespace std;
 using namespace Eigen;
 
-namespace FractureNetwork {
 
 struct DiscreteFractureNetwork
 {
@@ -43,4 +42,4 @@ struct Traces
 };
 
 
-}
+
