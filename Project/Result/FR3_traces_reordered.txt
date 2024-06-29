@@ -1,0 +1,16 @@
+# FractureId; NumTraces
+0; 2
+# TraceId; Tips; Length
+0; 0; 1
+1; 1; 0.316184
+
+# FractureId; NumTraces
+1; 1
+# TraceId; Tips; Length
+0; 0; 1
+
+# FractureId; NumTraces
+2; 1
+# TraceId; Tips; Length
+1; 1; 0.316184
+
