@@ -10,9 +10,8 @@
 
 using namespace std;
 
-namespace FractureNetwork {
 
-
+// Questa funzione importa un file, studia le fratture al suo interno e stampa i risultati
 bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered,
                     const string filePathInput, const string filePathOutput , DiscreteFractureNetwork& fracture, Traces& trace)
 {
@@ -34,16 +33,13 @@ bool ImportFracture(const string fileNameInput, const string fileNameOutput, con
         return false;
     }
 
-
     if(!TraceReorder(fracture, trace))
     {
         cerr << "Something wrong while reordering traces" << endl;
         return false;
     }
 
-
     if(!printTraces(fileNameOutputReordered, filePathOutput, trace, fracture))
-
     {
         cerr << "Something vrong printing the traces reordered" << endl;
         return false;
@@ -51,7 +47,6 @@ bool ImportFracture(const string fileNameInput, const string fileNameOutput, con
 
     return true;
 }
-
 
 
 // Questa funzione svuota tutti gli elementi all'interno della struttura DiscreteFractureNetwork
@@ -62,6 +57,7 @@ void clearDiscreteFractureNetwork(DiscreteFractureNetwork& fracture)
     fracture.NumVertices.clear();
     fracture.vertices.clear();
 }
+
 
 // Questa funzione svuota tutti gli elementi all'interno della struttura Traces
 void clearTraces(Traces& trace)
@@ -74,13 +70,13 @@ void clearTraces(Traces& trace)
     trace.traceReordered.clear();
 }
 
+
 // Questa funzione apre un file, legge il contenuto e lo salva in strutture dati adeguate
 bool ReadFracture(const string& filePath, const string& fileName, DiscreteFractureNetwork& fracture)
 {
     // Apro il file
     ifstream file;
     file.open(filePath + fileName);
-
     // Verifico che si apra correttamente
     if(file.fail())
     {
@@ -136,8 +132,6 @@ bool ReadFracture(const string& filePath, const string& fileName, DiscreteFractu
         unsigned int num;
         istringstream converterID(listLines.front());
         converterID >> id >> num;
-        // cout << "id: " << id << endl;
-        // cout << "num: " << num << endl;
 
         fracture.fractureID.push_back(id);
         fracture.NumVertices.push_back(num);
@@ -174,20 +168,19 @@ bool ReadFracture(const string& filePath, const string& fileName, DiscreteFractu
         }
         listLines.pop_front(); // Elimino la riga delle z
 
-
         // Salvo in una matrice le coordinate dei vertici della frattura
         MatrixXd verticesFracture(3,fracture.NumVertices[i]);
         verticesFracture << x.transpose(), y.transpose(), z.transpose();
-
         // Salvo la matrice di coordinate in un vettore di matrici
         fracture.vertices.push_back(verticesFracture);
     }
-
     // Chiudo il file__
     file.close();
     return true;
 }
 
+
+// Questa funzione crea una bounding box attorno alla frattura
 BoundingBox BBox3D(const MatrixXd& vertices)
 {
     BoundingBox bbox;
@@ -249,7 +242,6 @@ bool FractureIntersection(const DiscreteFractureNetwork fracture, Traces& trace)
                 // Calcolo il termine noto
                 double d1;
                 d1 = n1(0) * fracture.vertices[Id1](0,2) + n1(1) * fracture.vertices[Id1](1,2) + n1(2) * fracture.vertices[Id1](2,2);
-
                 double d2;
                 d2 = n2(0) * fracture.vertices[Id2](0,2) + n2(1) * fracture.vertices[Id2](1,2) + n2(2) * fracture.vertices[Id2](2,2);
 
@@ -280,7 +272,7 @@ bool FractureIntersection(const DiscreteFractureNetwork fracture, Traces& trace)
 }
 
 
-// Funzione che trova le tracce
+// Questa funzione trova le tracce come intersezioni di due fratture
 bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNetwork& fracture, unsigned int Id1, unsigned int Id2, Traces& trace)
 {
     unsigned int n = 0;
@@ -379,7 +371,7 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
         else if(a > c && a < b && b < d)
             SaveTraces(a, b, point, s, trace, Id1, Id2);
 
-        else if(abs((a - c)) <= tol && (b - d) <= tol)
+        else if(abs((a - c)) <= tol && abs((b - d)) <= tol)
             SaveTraces(a, b, point, s, trace, Id1, Id2);
 
         else if(abs((a - c)) <= tol && b < d)
@@ -412,7 +404,7 @@ void SaveTraces(double n, double m, Vector3d point, Vector3d s, Traces& trace, u
     trace.fractureId.push_back(idFracture);
 
     trace.traceId.push_back(trace.numTraces);
-    double lengthSegment = PointDistance(P, Q);
+    double lengthSegment = sqrt(((P[0]-Q[0])*(P[0]-Q[0])+((P[1]-Q[1])*(P[1]-Q[1]))+((P[2]-Q[2])*(P[2]-Q[2]))));
 
     trace.length.push_back(lengthSegment);
     trace.numTraces++;
@@ -432,7 +424,6 @@ bool PrintOnFile(const string fileName, const string filePath, Traces trace)
 
     file << "# Number of traces" << endl;
     file << trace.numTraces << endl;
-
     file << "# TraceId; FractureId1; FractureId2; X1; Y1; Z1; X2; Y2; Z2" << endl;
     for(unsigned int i = 0; i < trace.numTraces; i++)
     {
@@ -444,11 +435,8 @@ bool PrintOnFile(const string fileName, const string filePath, Traces trace)
     return true;
 }
 
-double PointDistance(Vector3d P, Vector3d Q){
-    return sqrt(((P[0]-Q[0])*(P[0]-Q[0])+((P[1]-Q[1])*(P[1]-Q[1]))+((P[2]-Q[2])*(P[2]-Q[2]))));
-}
 
-
+// Questa funzione riordina le tracce in passanti e non passanti e in ordine di lunghezza
 bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
 
 {
@@ -530,6 +518,7 @@ bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
 }
 
 
+// Questa funzione riordina le tracce per lunghezza
 bool reordering(vector<unsigned int>& idTraces, vector<double>& length)
 {
     if(idTraces.size() != length.size())
@@ -550,7 +539,7 @@ bool reordering(vector<unsigned int>& idTraces, vector<double>& length)
 }
 
 
-
+// Questa funzione stampa le tracce riordinate in un file
 bool printTraces(const string fileName, const string filePath, Traces trace, DiscreteFractureNetwork fracture)
 
 {
@@ -578,15 +567,12 @@ bool printTraces(const string fileName, const string filePath, Traces trace, Dis
     return true;
 }
 
-}
 
 // **********************************************************************************************************************************************
 
 
-namespace PolygonalMesh {
-
 // Questa funzione effettua il taglio delle fratture in sottopoligoni e salva i risultati in una mesh poligonale.
-bool fractureCut(FractureNetwork::DiscreteFractureNetwork& fracture, FractureNetwork::Traces& trace, Cell0D& Cell0D, Cell1D& Cell1D, Cell2D& Cell2D)
+bool fractureCut(DiscreteFractureNetwork& fracture, Traces& trace)
 {
     double tol = 1e-10;
     // Prendo in esame una frattura alla volta
@@ -781,10 +767,17 @@ bool fractureCut(FractureNetwork::DiscreteFractureNetwork& fracture, FractureNet
             subFracture = subFracture1;
             subFracture1.clear();
         }
+
+        // Ora salvo i risultati nella mesh
+        PolygonalMesh mesh = {};
+        if(!createMesh(subFracture, mesh))
+        {
+            cerr << "Error creating the mesh" << endl;
+            return false;
+        }
     }
     return true;
 }
-
 
 
 // Questa funzione effettua il taglio di una frattura per una traccia passante
@@ -873,6 +866,8 @@ bool createSubfracture(vector<Vector3d> subfracture, vector<Vector3d> cuttingTra
     return true;
 }
 
+
+// Questa funzione estende le tracce non passanti
 vector<Vector3d> extendTraces(vector<Vector3d> subFractureVertices, vector<Vector3d> subTraceVertices)
 {
     double tol = 1e-10;
@@ -908,202 +903,293 @@ vector<Vector3d> extendTraces(vector<Vector3d> subFractureVertices, vector<Vecto
 
 }
 
-// // Questa funzione trova i punti di intersezione tra una traccia e tutte quelle che tagliano precedentemente la frattura
-// vector<Vector3d> intersectTraces(FractureNetwork::Traces trace, unsigned int idTrace, unsigned int idFracture)
-// {
-//     // Memorizzo in un vettore traceBefore gli id delle tracce che tagliano la frattura prima di quella che sto studiando
-//     vector<unsigned int> traceBefore;
-//     unsigned int m = 0;
-//     while(m < trace.traceReordered[idFracture].size())
-//     {
-//         tuple<unsigned int, bool, double> triplets = trace.traceReordered[idFracture][m];
-//         unsigned int id = get<0>(triplets);
-//         if(id == idTrace)
-//             m = trace.traceReordered[idFracture].size();
-//         traceBefore.push_back(id);
-//         m++;
-//     }
-//     double tol = 1e-10;
-//     vector<Vector3d> intersectionPoint;
-//     unsigned int n = 1;
-//     // Creo un vettore nullo
-//     Vector3d null;
-//     null << NULL, NULL, NULL;
-//     // PROBLEMA: IO VOGLIO SOLO LE TRACCE DI QUELLA FRATTURA
-//     while(n <= traceBefore.size())
-//     {
-//         Vector3d vec = trace.coordinates[idTrace].col(1) - trace.coordinates[idTrace].col(0);
-//         Vector3d point = trace.coordinates[idTrace].col(0);
-//         Vector3d vec1 = trace.coordinates[traceBefore[n]].col(1) - trace.coordinates[traceBefore[n]].col(0);
-//         Vector3d point1 = trace.coordinates[traceBefore[n]].col(0);
-//         if((vec1.cross(vec)).norm() != 0)
-//         {
-//             double t;
-//             double u;
-//             t = ((point1.cross(vec1) - point.cross(vec1)).dot(vec.cross(vec1))) / (((vec.cross(vec1)).norm())*((vec.cross(vec1)).norm()));
-//             u = ((point.cross(vec) - point1.cross(vec)).dot(vec1.cross(vec))) / (((vec1.cross(vec)).norm())*((vec1.cross(vec)).norm()));
 
-//             Vector3d intersection = point + t * vec;
-//             Vector3d verify = point1 + u * vec1;
+// Questa funzione salva i risultati su una mesh
+bool createMesh(vector<pair<vector<Vector3d>, vector<pair<vector<Vector3d>, unsigned int>>>> subFracture, PolygonalMesh& mesh)
+{
+    double tol = 1e-10;
 
-//             // Se il punto di intersezione coincide con il punto di verifica, allora è corretto, lo inserisco in un vettore nella posizione corrispondente alla traccia intersecata dalla traccia che sto esaminando
-//             if((intersection - verify).norm() < tol)
-//             {
-//                 intersectionPoint.push_back(intersection);
-//             }
-//             // Se non si interseca inserisco un vettore nullo
-//             else
-//             {
-//                 intersectionPoint.push_back(null);
-//             }
-//         }
-//         n++;
-//     }
-//     return intersectionPoint;
-// }
+    // Riservo lo spazio che mi può servire sovrastimandone la dimensione
+    unsigned int dimension = subFracture.size();
+    mesh.coordinates0D.reserve(3*dimension);
+    mesh.cellId0D.reserve(3*dimension);
+    mesh.cellId1D.reserve(4*dimension);
+    mesh.verticesId1D.reserve(4*dimension);
+    mesh.cellId2D.reserve(dimension);
+    mesh.numVertices2D.reserve(dimension);
+    mesh.numEdges2D.reserve(dimension);
+    mesh.verticesId2D.reserve(dimension);
+    mesh.edgesId2D.reserve(dimension);
 
-// // Questa funzione interseca tra di loro tutte le tracce di una frattura e trova i punti di intersezione
-// vector<tuple<Vector3d, unsigned int, unsigned int>> intersectTraces(FractureNetwork::Traces trace, unsigned int idFracture)
-// {
-//     // Memorizzo in un vettore tracesId gli id delle tracce che tagliano la frattura che sto studiando
-//     vector<unsigned int> tracesId;
-//     for(unsigned int i = 0; i < trace.traceReordered[idFracture].size(); i++)
-//     {
-//         tuple<unsigned int, bool, double> triplets = trace.traceReordered[idFracture][i];
-//         unsigned int id = get<0>(triplets);
-//         tracesId.push_back(id);
-//     }
-//     double tol = 1e-10;
-//     vector<tuple<Vector3d, unsigned int, unsigned int>> traceIntersection;
-//     for(unsigned int n = 0; n < tracesId.size(); n++)
-//     {
-//         for(unsigned int m = 0; m < tracesId.size(); m++)
-//         {
-//             // Chiedo che n sia diverso da m, in questo modo avro tutte i punti due volte ma nelle funzioni successive mi facilita la ricerca
-//             if(n != m)
-//             {
-//                 Vector3d vec = trace.coordinates[n].col(1) - trace.coordinates[n].col(0);
-//                 Vector3d point = trace.coordinates[n].col(0);
-//                 Vector3d vec1 = trace.coordinates[m].col(1) - trace.coordinates[m].col(0);
-//                 Vector3d point1 = trace.coordinates[m].col(0);
-//                 if((vec1.cross(vec)).norm() != 0)
-//                 {
-//                     double t;
-//                     double u;
-//                     t = ((point1.cross(vec1) - point.cross(vec1)).dot(vec.cross(vec1))) / (((vec.cross(vec1)).norm())*((vec.cross(vec1)).norm()));
-//                     u = ((point.cross(vec) - point1.cross(vec)).dot(vec1.cross(vec))) / (((vec1.cross(vec)).norm())*((vec1.cross(vec)).norm()));
+    unsigned int id0D = 0;
+    unsigned int id1D = 0;
+    unsigned int id2D = 0;
+    // Per ogni sottofrattura
+    for(unsigned int k = 0; k < subFracture.size(); k++)
+    {
+        vector<Vector3d> polygon = get<0>(subFracture[k]);
+        vector<unsigned int> verticesId;
+        vector<unsigned int> edgesId;
+        // Considero un vertice alla volta
+        for(unsigned int h = 0; h < polygon.size(); h++)
+        {
+            // Cell0D
+            // E considero il vertice sucessivo del poligono
+            unsigned int t = (h+1) % polygon.size();
+            // Verifico che questi vertici non siano già presenti nella mesh
+            auto begin0D = mesh.coordinates0D.begin();
+            auto end0D = mesh.coordinates0D.end();
+            auto it1 = find(begin0D, end0D, polygon[h]);
+            auto it2 = find(begin0D, end0D, polygon[t]);
+            int id1;
+            int id2;
 
-//                     Vector3d intersection = point + t * vec;
-//                     Vector3d verify = point1 + u * vec1;
+            // Se il vertice h non è presente nella mesh lo salvo e memorizzo il suo id
+            if(it1 == end0D)
+            {
+                mesh.coordinates0D.push_back(polygon[h]);
+                mesh.cellId0D.push_back(id0D);
+                id1 = id0D;
+                id0D++;
+            }
+            // Altrimenti cerco e memorizzo il suo id
+            else
+                id1 = distance(begin0D, it1);
 
-//                     // Se il punto di intersezione coincide con il punto di verifica, allora è corretto, lo inserisco in un vettore nella posizione corrispondente alla traccia intersecata dalla traccia che sto esaminando
-//                     if((intersection - verify).norm() < tol && u >= 0 && u <= 1)
-//                     {
-//                         tuple<Vector3d, unsigned int, unsigned int> intersectionPoint;
-//                         intersectionPoint = make_tuple(intersection, n, m);
-//                         traceIntersection.push_back(intersectionPoint);
-//                     }
-//                 }
-//             }
-//         }
-//     }
-//     return traceIntersection;
-// }
+            // Se il vertice t non è presente nella mesh lo salvo e memorizzo il suo id
+            if(it2 == end0D)
+            {
+                mesh.coordinates0D.push_back(polygon[t]);
+                mesh.cellId0D.push_back(id0D);
+                id2 = id0D;
+                id0D++;
+            }
+            // Altrimenti cerco e memorizzo il suo id
+            else
+                id2 = distance(begin0D, it2);
 
+            verticesId.push_back(id1);
 
-// bool notPassingCut(vector<vector<Vector3d>>& subfractureVertices, FractureNetwork::Traces trace, unsigned int traceId, vector<tuple<Vector3d, unsigned int, unsigned int>> tracesIntersection, vector<vector<Vector3d>>& subfractureVertices1)
-// {
-//     vector<Vector3d> traceCoord;
-//     traceCoord.push_back(trace.coordinates[traceId].col(0));
-//     traceCoord.push_back(trace.coordinates[traceId].col(1));
-//     vector<tuple<Vector3d, unsigned int, unsigned int>> intersections;
-//     // Salvo solo i punti di intersezione tra la traccia che sto studiando e tutte le altre
-//     for(unsigned int i = 0; i < tracesIntersection.size(); i++)
-//     {
-//         if(get<1>(tracesIntersection[i]) == traceId)
-//             intersections.push_back(tracesIntersection[i]);
-//     }
-//     // Giro su tutte le sottofratture che ho trovato fino a questo momento
-//     for(unsigned int n = 0; n < subfractureVertices.size(); n++)
-//     {
-//         vector<Vector3d> subfracture = subfractureVertices[n];
-//         unsigned int c = 0;
-//         vector<Vector3d> subtrace;
-//         // Giro su tutti i punti di intersezione tra la traccia che sto studiando e tutte le altre
-//         for(unsigned int m = 0; m < intersections.size(); m++)
-//         {
-//             Vector3d point = get<0>(intersections[m]);
-//             // Giro su tutti i lati della sottofrattura
-//             for(unsigned int s = 0; s < subfracture.size(); s++)
-//             {
-//                 unsigned int t = (s + 1) % subfracture.size();
-//                 Vector3d vec = subfracture[t] - subfracture[s];
-//                 Vector3d P = subfracture[s];
-//                 // Voglio vedere se il punto point si trova sui lati della sottofrattura
-//                 double k = (vec.dot(point - P)) / (vec.norm() * vec.norm());
-//                 if(k >= 0 && k <= 1)
-//                 {
-//                     c++;
-//                     subtrace.push_back(point);
-//                 }
-//             }
-//         }
-//         // Se c = 2 vuol dire che ho trovato due punti di intersezione tra le tracce che appartengono alla sottofrattura che sto studiando, dunque posso consierare la
-//         // sottotraccia come passante per questa sottofrattura e calcolo le due sottofratture
-//         if(c == 2)
-//         {
-//             if(!createSubfracture(subfracture, subtrace, subfractureVertices1))
-//             {
-//                 cerr << "Error creating subtraces" << endl;
-//                 return false;
-//             }
-//         }
-//         // Se c = 1 vuol dire che trovo un solo punto di intersezione tra la mia traccia e le altre tracce che appartiene alla sottofrattura, dunque devo estendere la sottotraccia
-//         else if(c == 1)
-//         {
-//             // DEVO METTERE DENTRO SUBTRACE UNO DEGLI ESTREMI DELLA TRACCIA, QUALE??? QUELLO CON DISTANZA MINIMA DALL'ALTRO PUNTO CHE HO IN SUBTRACE??
-//             vector<Vector3d> extendedVertices = extendTraces(subfracture, subtrace);
-//         }
+            // Ora voglio verificare che questo punto non sia interno ad un esegmento, infatti se lo fosse devo cancellare il segmento che lo contiene e sostituirlo con due segmenti,
+            // ognuno formato da un estremo del segmento precedente e questo punto.
+            // Un esempio di questa casistica è la frattura 0 del file FR3, dove ho un'intersezione delle due tracce "a T".
+            for(unsigned int p = 0; p < mesh.verticesId1D.size(); p++)
+            {
+                int firstId = mesh.verticesId1D[p][0];
+                int secondId = mesh.verticesId1D[p][1];
+                int coupleId = mesh.cellId1D[p];
+                Vector3d vec = mesh.coordinates0D[secondId] - mesh.coordinates0D[firstId];
+                Vector3d vec1 = mesh.coordinates0D[id1] - mesh.coordinates0D[firstId];
+                Vector3d vec2 = mesh.coordinates0D[id1] - mesh.coordinates0D[secondId];
+                // Se il punto id1 si trova sul segmento, elimino il segmento e lo sostituisco con i due sotto-segmenti formati dal punto id1
+                if((vec.cross(vec1)).norm() < tol && vec.dot(vec1) > tol && (-vec).dot(vec2) > tol)
+                {
+                    auto it = remove(mesh.verticesId1D.begin(), mesh.verticesId1D.end(), mesh.verticesId1D[p]);
+                    mesh.verticesId1D.erase(it, mesh.verticesId1D.end());
+                    Vector2i newCouple1 = {firstId, id1};
+                    Vector2i newCouple2 = {id1, secondId};
+                    mesh.verticesId1D.insert(it, newCouple1);
+                    mesh.verticesId1D.push_back(newCouple2);
+                    mesh.cellId1D.push_back(id1D);
 
-//         // Se c = 0 vuol dire che non c'è nessun punto di intersezione tra la mia traccia e le altre che appartengono alla sottofrattura, dunque per questa
-//     }
+                    // Ora aggiorno anche la Cell2D
+                    for(unsigned int q = 0; q < mesh.edgesId2D.size(); q++)
+                    {
+                        // Aggiungo l'id del nuovo lato al vettore di lati
+                        auto it = find(mesh.edgesId2D[q].begin(), mesh.edgesId2D[q].end(), coupleId);
+                        if(it != mesh.edgesId2D[q].end())
+                        {
+                            mesh.edgesId2D[q].insert(next(it), id1D);
+                            mesh.numEdges2D[q]++;
+                        }
+                        // Aggiungo l'id del nuovo vertice al vettore di vertici
+                        auto itFirst  = find(mesh.verticesId2D[q].begin(), mesh.verticesId2D[q].end(), firstId);
+                        auto itSecond  = find(mesh.verticesId2D[q].begin(), mesh.verticesId2D[q].end(), secondId);
+                        // Se il vettore r contiene entrambi i punti, aggiungo il punto in mezzo
+                        if(itFirst != mesh.verticesId2D[q].end() && itSecond != mesh.verticesId2D[q].end())
+                        {
+                            mesh.verticesId2D[q].insert(next(itFirst), id1);
+                            mesh.numVertices2D[q]++;
+                        }
+                    }
+                    id1D++;
+                }
+            }
 
 
-//     return true;
-// }
 
-// // Questa funzione verifica se un punto è interno ad un poligono
-// bool pointInsidePolygon(vector<Vector3d> subFracture, Vector3d point)
-// {
-//     double tol = 1e-6;
-//     unsigned int i = 0;
-//     Vector3d vec = subFracture[i] - subFracture[i + 1];
-//     Vector3d vec1 = subFracture[i + 2] - subFracture[i + 1];
-//     Vector3d normal = vec.cross(vec1);
-//     Vector3d v = subFracture[i + 1] - point;
-//     double angleSum = 0;
-//     // Verifico che il punto appartenga al piano della sottofrattura
-//     if((v.cross(normal)).norm() < tol)
-//     {
-//         for(unsigned int n = 0; n < subFracture.size(); n++)
-//         {
-//             unsigned int k = (n+1) % subFracture.size();
-//             Vector3d a = subFracture[n] - point;
-//             Vector3d b = subFracture[k] - point;
-//             double angle = acos(a.dot(b) / (a.norm() * b.norm()));
-//             angleSum += angle;
-//         }
-//     }
-//     else
-//         return false;
+            // Cell1D
+            Vector2i vertices1D = {id1, id2};
+            auto begin1D = mesh.verticesId1D.begin();
+            auto end1D = mesh.verticesId1D.end();
+            auto itCouple1 = find(begin1D, end1D, vertices1D);
+            int idEdge;
 
-//     // Verifico che l'angolo sia 2pi e quindi che il punto è interno al poligono
-//     if(angleSum - (2 * M_PI) > tol)
-//         return false;
+            // Verifico se questa coppia è già presente nella mesh
+            if(itCouple1 == end1D)
+            {
+                Vector2i vertices1Dswap = {id2, id1};
+                auto itCouple2 = find(begin1D, end1D, vertices1Dswap);
+                // Verifico che anche la coppia opposta non è presente nella mesh
+                if(itCouple2 == end1D)
+                {
+                    // Se entrambe non sono presenti, allora posso salvarla come nuova coppia
+                    mesh.verticesId1D.push_back(vertices1D);
+                    mesh.cellId1D.push_back(id1D);
+                    idEdge = id1D;
+                    id1D++;
+                }
+                // Se invece la coppia scambiata è presente nella mesh salvo l'id a quel lato
+                else
+                    idEdge = distance(begin1D, itCouple2);
+            }
+            // Se la coppia è presente nella mesh salvo l'id a quel lato
+            else
+                idEdge = distance(begin1D, itCouple1);
 
-//     return true;
-// }
+            edgesId.push_back(idEdge);
+        }
 
+        // Cell2D
+        mesh.cellId2D.push_back(id2D);
+        id2D++;
+        mesh.verticesId2D.push_back(verticesId);
+        mesh.numVertices2D.push_back(verticesId.size());
+        mesh.edgesId2D.push_back(edgesId);
+        mesh.numEdges2D.push_back(edgesId.size());
+    }
 
+    mesh.numCell0D = mesh.cellId0D.size();
+    mesh.numCell1D = mesh.cellId1D.size();
+    mesh.numCell2D = mesh.cellId2D.size();
+
+    return true;
 }
+
+
+
+    // // Cell0D
+    // // Riservo lo spazio che mi può servire sovrastimandone la dimensione
+    // mesh.coordinates0D.reserve(3*subFracture.size());
+    // mesh.cellId0D.reserve(3*subFracture.size());
+
+    // unsigned int m = 0;
+    // // Per ogni sottofrattura
+    // for(unsigned int k = 0; k < subFracture.size(); k++)
+    // {
+    //     vector<Vector3d> polygon = get<0>(subFracture[k]);
+    //     // Considero un vertice alla volta
+    //     for(unsigned int h = 0; h < polygon.size(); h++)
+    //     {
+    //         // Verifico che questo vertice non sia già presente nella mesh
+    //         auto it = find(mesh.coordinates0D.begin(), mesh.coordinates0D.end(), polygon[h]);
+    //         if(it == mesh.coordinates0D.end())
+    //         {
+    //             mesh.coordinates0D.push_back(polygon[h]);
+    //             mesh.cellId0D.push_back(m);
+    //             m++;
+    //         }
+    //     }
+    // }
+    // mesh.numCell0D = mesh.coordinates0D.size();
+
+
+    // // Cell1D
+    // // Riservo lo spazio che mi può servire, sovrastimandone la dimensione
+    // mesh.cellId1D.reserve(4*subFracture.size());
+    // mesh.verticesId1D.reserve(4*subFracture.size());
+
+    // unsigned int counter = 0;
+    // for(unsigned int k = 0; k < subFracture.size(); k++)
+    // {
+    //     vector<Vector3d> polygon = get<0>(subFracture[k]);
+    //     for(unsigned int h = 0; h < polygon.size(); h++)
+    //     {
+    //         unsigned int t = (h+1) % polygon.size();
+    //         // Trovo gli id in Cell0D dei due punti che formano gli estremi del mio segmento
+    //         auto it1 = find(mesh.coordinates0D.begin(), mesh.coordinates0D.end(), polygon[h]);
+    //         auto it2 = find(mesh.coordinates0D.begin(), mesh.coordinates0D.end(), polygon[t]);
+    //         int id1 = distance(mesh.coordinates0D.begin(), it1);
+    //         int id2 = distance(mesh.coordinates0D.begin(), it2);
+
+    //         // // Ora voglio verificare che sul segmento non siano presenti altri punti che ho salvato in Cell0D, infatti in questo caso il lato è in realtà formato da due sotto-segmenti più piccoli
+    //         // // Un esempio di questa casistica è la frattura 0 del file FR3, dove ho un'intersezione delle due tracce "a T".
+    //         unsigned int flag = 0;
+    //         // Vector3d vec = mesh.coordinates0D[id2] - mesh.coordinates0D[id1];
+    //         // for(unsigned int p = 0; p < mesh.coordinates0D.size(); p++)
+    //         // {
+    //         //     Vector3d vec1 = mesh.coordinates0D[p] - mesh.coordinates0D[id1];
+    //         //     Vector3d vec2 = mesh.coordinates0D[p] - mesh.coordinates0D[id2];
+    //         //     if((vec.cross(vec1).norm()) < tol && vec.dot(vec1) > tol && (-vec).dot(vec2) > tol)
+    //         //     {
+    //         //         flag = 1;
+    //         //         continue;
+    //         //     }
+    //         // }
+    //         // Controllo che non ci siano doppioni, cioè che la coppia di id che voglio salvare non sia già presente nella mesh
+    //         for(unsigned int q = 0; q < mesh.verticesId1D.size(); q++)
+    //         {
+    //             if((id1 == mesh.verticesId1D[q][0] && id2 == mesh.verticesId1D[q][1]) || (id1 == mesh.verticesId1D[q][1] && id2 == mesh.verticesId1D[q][0]))
+    //             {
+    //                 flag = 1;
+    //                 continue;
+    //             }
+    //         }
+    //         // Se non è entrato nell'if qui sopra, dunque se non c'è un altro punto all'interno del mio segmento, allora lo posso salvare nella mesh
+    //         if(flag == 0)
+    //         {
+    //             Vector2i verticesId = {id1, id2};
+    //             mesh.verticesId1D.push_back(verticesId);
+    //             mesh.cellId1D.push_back(counter);
+    //             counter++;
+    //         }
+    //     }
+    // }
+    // mesh.numCell1D = mesh.verticesId1D.size();
+
+
+    // // Cell2D
+    // mesh.numCell2D = subFracture.size();
+    // mesh.cellId2D.reserve(mesh.numCell2D);
+    // mesh.numVertices2D.reserve(mesh.numCell2D);
+    // mesh.numEdges2D.reserve(mesh.numCell2D);
+    // mesh.verticesId2D.reserve(mesh.numCell2D);
+    // mesh.edgesId2D.reserve(mesh.numCell2D);
+
+    // for(unsigned int k = 0; k < mesh.numCell2D; k++)
+    // {
+    //     mesh.cellId2D.push_back(k);
+    //     vector<Vector3d> polygon = get<0>(subFracture[k]);
+    //     mesh.numVertices2D.push_back(polygon.size());
+    //     mesh.numEdges2D.push_back(polygon.size());
+    //     vector<unsigned int> idVertices;
+    //     vector<unsigned int> idEdges;
+
+    //     for(unsigned int h = 0; h < polygon.size(); h++)
+    //     {
+    //         unsigned int t = (h+1) % polygon.size();
+    //         // Trovo gli id in Cell0D dei due punti che formano gli estremi del mio segmento
+    //         auto it1 = find(mesh.coordinates0D.begin(), mesh.coordinates0D.end(), polygon[h]);
+    //         auto it2 = find(mesh.coordinates0D.begin(), mesh.coordinates0D.end(), polygon[t]);
+    //         int id1 = distance(mesh.coordinates0D.begin(), it1);
+    //         int id2 = distance(mesh.coordinates0D.begin(), it2);
+    //         idVertices.push_back(id1);
+    //         Vector2i vertices = {id1, id2};
+    //         auto it3 = find(mesh.verticesId1D.begin(), mesh.verticesId1D.end(), vertices);
+    //         if(it3 == mesh.verticesId1D.end() && vertices != mesh.verticesId1D.back())
+    //         {
+    //             vertices = {id2, id1};
+    //             it3 = find(mesh.verticesId1D.begin(), mesh.verticesId1D.end(), vertices);
+    //         }
+    //         int id3 = distance(mesh.verticesId1D.begin(), it3);
+    //         idEdges.push_back(id3);
+    //     }
+    //     mesh.verticesId2D.push_back(idVertices);
+    //     mesh.edgesId2D.push_back(idEdges);
+    // }
+
+
+
+
+
 
