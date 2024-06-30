@@ -5,7 +5,6 @@
 
 using namespace std;
 
-namespace FractureNetwork {
 
 bool ImportFracture(const string fileNameInput, const string fileNameOutput, const string fileNameOutputReordered,
                     const string filePathInput, const string filePathOutput, DiscreteFractureNetwork& fracture, Traces& trace);
@@ -34,21 +33,14 @@ bool printTraces(const string fileName, const string filePath, Traces trace, Dis
 
 bool FindTraces(const Vector3d s, const Vector3d Point, const DiscreteFractureNetwork& fracture, unsigned int Id1, unsigned int Id2, Traces& trace);
 
-void rewriteData(const string& inputFileName, const string& outputFileName);
+
+// *****************************************************************************************************************************************************
 
 
-}
-
-namespace PolygonalMesh {
-
-bool fractureCut(FractureNetwork::DiscreteFractureNetwork& fracture, FractureNetwork::Traces& trace, Cell0D& Cell0D, Cell1D& Cell1D, Cell2D& Cell2D);
+bool fractureCut(DiscreteFractureNetwork& fracture, Traces& trace);
 
 bool createSubfracture(vector<Vector3d> subfracture, vector<Vector3d> cuttingTrace, vector<vector<Vector3d>>& subfractureVertices);
 
-vector<Vector3d> extendTraces(MatrixXd fractureVertices, MatrixXd verticesTrace);
+vector<Vector3d> extendTraces(vector<Vector3d> subFractureVertices, vector<Vector3d> subTraceVertices);
 
-// vector<Vector3d> intersectTraces(FractureNetwork::Traces trace, unsigned int idTrace, unsigned int idFracture);
-
-vector<tuple<Vector3d, unsigned int, unsigned int>> intersectTraces(FractureNetwork::Traces trace, unsigned int idFracture);
-
-}
+bool createMesh(vector<pair<vector<Vector3d>, vector<pair<vector<Vector3d>, unsigned int>>>> subFracture, PolygonalMesh& mesh);

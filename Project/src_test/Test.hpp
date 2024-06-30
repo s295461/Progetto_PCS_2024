@@ -14,9 +14,6 @@
 
 
 using namespace testing;
-using namespace FractureNetwork;
-
-
 //Test ImportFracture
 // BISOGNA FARLO? E IN CASO COME LO FACCIO?
 
@@ -24,6 +21,7 @@ using namespace FractureNetwork;
 
 //Test ReadFracture
 TEST(ReadFractureTest, FileNotFound)
+
 {
     DiscreteFractureNetwork fracture;
 
@@ -112,11 +110,11 @@ TEST(FractureIntersectionTest, TestSuccessfulIntersection)
     EXPECT_EQ(true, intersectionResult);
 }
 
+<<<<<<< HEAD
 TEST(FractureIntersectionTest, TestNoIntersection)
 {
     DiscreteFractureNetwork fracture;
     Traces trace;
-
 
     fracture.numFracture = 2;
     fracture.fractureID = {0, 1};
@@ -139,8 +137,8 @@ TEST(FractureIntersectionTest, TestNoIntersection)
 
 
     EXPECT_EQ(false, intersectionResult);
-}
 
+}
 
 
 // Test SaveTraces
@@ -406,6 +404,7 @@ TEST(FindTracesTest, CorrectIntersection)
                             1.5, 0, 0,
                             0.5, 1, 0,
                             1, 0.5, 0;
+
 
 
     Vector3d s(1, 1, 1);
