@@ -1,0 +1,330 @@
+# FractureId; NumTraces
+0; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+1; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+2; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+3; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+4; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+5; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+6; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+7; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+8; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+9; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+10; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+11; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+12; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+13; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+14; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+15; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+16; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+17; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+18; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+19; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+20; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+21; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+22; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+23; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+24; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+25; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+26; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+27; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+28; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+29; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+30; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+31; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+32; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+33; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+34; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+35; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+36; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+37; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+38; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+39; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+40; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+41; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+42; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+43; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+44; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+45; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+46; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+47; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+48; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+49; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+50; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+51; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+52; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+53; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+54; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+55; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+56; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+57; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+58; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+59; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+60; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+61; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+62; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+63; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+64; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+65; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+66; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+67; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+68; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+69; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+70; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+71; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+72; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+73; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+74; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+75; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+76; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+77; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+78; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+79; 0
+# TraceId; Tips; Length
+
+# FractureId; NumTraces
+80; 1
+# TraceId; Tips; Length
+0; 0; 10
+
+# FractureId; NumTraces
+81; 1
+# TraceId; Tips; Length
+0; 0; 10
+

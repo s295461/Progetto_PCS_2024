@@ -7,19 +7,13 @@
 
 using namespace std;
 using namespace Eigen;
-using namespace FractureNetwork;
 
-using namespace PolygonalMesh;
 
 
 int main()
 {
     DiscreteFractureNetwork fracture;
     Traces trace;
-
-    Cell0D Cell0D;
-    Cell1D Cell1D;
-    Cell2D Cell2D;
 
     string filePathInput = "DFN";
     string filePathOutput = "Result";
@@ -34,12 +28,11 @@ int main()
     if(!ImportFracture(fileNameFR3, fileNameOutputFR3, fileNameOutputReorderedFR3, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
-    if(!fractureCut(fracture, trace, Cell0D, Cell1D, Cell2D))
+    if(!fractureCut(fracture, trace))
         return 1;
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
-
 
 
 
@@ -51,8 +44,8 @@ int main()
     if(!ImportFracture(fileNameFR10, fileNameOutputFR10, fileNameOutputReorderedFR10, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
-    // if(!fractureCut(fracture, trace, Cell0D, Cell1D, Cell2D))
-    //     return 1;
+    if(!fractureCut(fracture, trace))
+        return 1;
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
@@ -65,6 +58,9 @@ int main()
     string fileNameOutputReorderedFR50 = "/FR50_traces_reordered.txt";
 
     if(!ImportFracture(fileNameFR50, fileNameOutputFR50, fileNameOutputReorderedFR50, filePathInput, filePathOutput, fracture, trace))
+        return 1;
+
+    if(!fractureCut(fracture, trace))
         return 1;
 
 
@@ -81,6 +77,8 @@ int main()
     if(!ImportFracture(fileNameFR82, fileNameOutputFR82, fileNameOutputReorderedFR82, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
+    if(!fractureCut(fracture, trace))
+        return 1;
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
@@ -94,11 +92,11 @@ int main()
     if(!ImportFracture(fileNameFR200, fileNameOutputFR200, fileNameOutputReorderedFR200, filePathInput, filePathOutput, fracture, trace))
         return 1;
 
+    if(!fractureCut(fracture, trace))
+        return 1;
 
     clearDiscreteFractureNetwork(fracture);
     clearTraces(trace);
-
-
 
 
 
@@ -107,6 +105,9 @@ int main()
     string fileNameOutputFR362 = "/FR362_traces.txt";
     string fileNameOutputReorderedFR362 = "/FR362_traces_reordered.txt";
     if(!ImportFracture(fileNameFR362, fileNameOutputFR362, fileNameOutputReorderedFR362, filePathInput, filePathOutput, fracture, trace))
+        return 1;
+
+    if(!fractureCut(fracture, trace))
         return 1;
 
     clearDiscreteFractureNetwork(fracture);
