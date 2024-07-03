@@ -181,16 +181,16 @@ bool ReadFracture(const string& filePath, const string& fileName, DiscreteFractu
 
 
 // Questa funzione crea una bounding box attorno alla frattura
-BoundingBox BBox3D(const MatrixXd& vertices)
+vector<Vector3d> BBox3D(const MatrixXd& vertices)
 {
-    BoundingBox bbox;
+    vector<Vector3d> bbox(2);
     //Inizializzato a valori infinitamente grandi positivi e negativi
-    bbox.min = Vector3d::Constant(-numeric_limits<double>::infinity());
-    bbox.max = Vector3d::Constant(numeric_limits<double>::infinity());
+    bbox[0] = Vector3d::Constant(-numeric_limits<double>::infinity());
+    bbox[1] = Vector3d::Constant(numeric_limits<double>::infinity());
     //Aggiorna quando trova un nuovo massimo o minimo elemento per elemento
     for (int i = 0; i < vertices.cols(); ++i) {
-        bbox.min = bbox.min.cwiseMin(vertices.col(i));
-        bbox.max = bbox.max.cwiseMax(vertices.col(i));
+        bbox[0] = bbox[0].cwiseMin(vertices.col(i));
+        bbox[1] = bbox[1].cwiseMax(vertices.col(i));
     }
     return bbox;
 }
@@ -199,13 +199,16 @@ BoundingBox BBox3D(const MatrixXd& vertices)
 // Questa funzione calcola l'intersezione tra due piani creati da due fratture
 bool FractureIntersection(const DiscreteFractureNetwork fracture, Traces& trace)
 {
-    vector<FractureBBox> BBoxVect(fracture.numFracture);
+    // vector<FractureBBox> BBoxVect(fracture.numFracture);
+    vector<tuple<unsigned int, vector<Vector3d>>> BBoxVect;
 
     for(unsigned int i = 0; i < fracture.numFracture; i++)
     {
         unsigned int ID = fracture.fractureID[i];
-        BBoxVect[i].bbox = BBox3D(fracture.vertices[ID]);
-        BBoxVect[i].fractureID = ID;
+        // BBoxVect[i].bbox = BBox3D(fracture.vertices[ID]);
+        // BBoxVect[i].fractureID = ID;
+        vector<Vector3d> bbox = BBox3D(fracture.vertices[ID]);
+        BBoxVect.push_back(make_tuple(ID, bbox));
     }
     for(unsigned int i = 0; i < fracture.numFracture; i++)
     {
@@ -213,18 +216,18 @@ bool FractureIntersection(const DiscreteFractureNetwork fracture, Traces& trace)
         {
             if(i < j)
             {
-                bool intersezione = !(BBoxVect[i].bbox.min.x() > BBoxVect[j].bbox.max.x() ||
-                                      BBoxVect[i].bbox.min.y() > BBoxVect[j].bbox.max.y() ||
-                                      BBoxVect[i].bbox.min.z() > BBoxVect[j].bbox.max.z() ||
-                                      BBoxVect[i].bbox.max.x() < BBoxVect[j].bbox.min.x() ||
-                                      BBoxVect[i].bbox.max.y() < BBoxVect[j].bbox.min.y() ||
-                                      BBoxVect[i].bbox.max.z() < BBoxVect[j].bbox.min.z());
-                if (!intersezione) {
+                bool intersect = !(get<1>(BBoxVect[i])[0].x() > get<1>(BBoxVect[j])[1].x() ||
+                                      get<1>(BBoxVect[i])[0].y() > get<1>(BBoxVect[j])[1].y() ||
+                                      get<1>(BBoxVect[i])[0].y() > get<1>(BBoxVect[j])[1].z() ||
+                                      get<1>(BBoxVect[j])[1].x() < get<1>(BBoxVect[i])[0].x() ||
+                                      get<1>(BBoxVect[j])[1].y() < get<1>(BBoxVect[i])[0].y() ||
+                                      get<1>(BBoxVect[j])[1].z() < get<1>(BBoxVect[i])[0].z());
+                if (!intersect) {
                     continue;
                 }
                 // Seleziono due fratture
-                unsigned int Id1 = BBoxVect[i].fractureID;
-                unsigned int Id2 = BBoxVect[j].fractureID;
+                unsigned int Id1 = get<0>(BBoxVect[i]);
+                unsigned int Id2 = get<0>(BBoxVect[j]);
 
                 // Calcolo i vettori
                 Vector3d u1 = fracture.vertices[Id1].col(0) - fracture.vertices[Id1].col(2);
@@ -971,7 +974,7 @@ bool createMesh(vector<pair<vector<Vector3d>, vector<pair<vector<Vector3d>, unsi
 
             verticesId.push_back(id1);
 
-            // Ora voglio verificare che questo punto non sia interno ad un esegmento, infatti se lo fosse devo cancellare il segmento che lo contiene e sostituirlo con due segmenti,
+            // Ora voglio verificare che questo punto non sia interno ad un segmento, infatti se lo fosse devo cancellare il segmento che lo contiene e sostituirlo con due segmenti,
             // ognuno formato da un estremo del segmento precedente e questo punto.
             // Un esempio di questa casistica è la frattura 0 del file FR3, dove ho un'intersezione delle due tracce "a T".
             for(unsigned int p = 0; p < mesh.verticesId1D.size(); p++)

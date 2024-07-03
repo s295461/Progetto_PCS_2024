@@ -15,7 +15,7 @@ void clearTraces(Traces& trace);
 
 bool ReadFracture(const string& filePath, const string& fileName, DiscreteFractureNetwork& fracture);
 
-BoundingBox BBox3D(const MatrixXd& vertices);
+vector<Vector3d> BBox3D(const MatrixXd& vertices);
 
 bool FractureIntersection(const DiscreteFractureNetwork fracture, Traces& trace);
 
