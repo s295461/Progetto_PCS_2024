@@ -188,7 +188,7 @@ vector<Vector3d> BBox3D(const MatrixXd& vertices)
 {
     vector<Vector3d> bbox(2);
     //Inizializzato a valori infinitamente grandi positivi e negativi
-    bbox[0] = Vector3d::Constant(-numeric_limits<double>::infinity());
+    bbox[0] = Vector3d::Constant(numeric_limits<double>::infinity());
     bbox[1] = Vector3d::Constant(numeric_limits<double>::infinity());
     //Aggiorna quando trova un nuovo massimo o minimo elemento per elemento
     for (int i = 0; i < vertices.cols(); ++i) {
@@ -287,7 +287,6 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
     vector<Vector3d> Point1;
     vector<Vector3d> Point2;
 
-    //double tol = 1e-10;
 
     // Nel ciclo while prendo ogni volta un segmento della prima e un segmento della seconda frattura
     while(n < fracture.NumVertices[Id1] && m < fracture.NumVertices[Id2])
@@ -446,7 +445,6 @@ bool PrintOnFile(const string fileName, const string filePath, Traces trace)
 bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
 
 {
-    //double tol = 1e-10;
     for(unsigned int i = 0; i < fracture.numFracture; i++)
     {
         vector<tuple<unsigned int, bool, double>> fractureTraces;
@@ -581,7 +579,6 @@ bool printTraces(const string fileName, const string filePath, Traces trace, Dis
 // Questa funzione effettua il taglio delle fratture in sottopoligoni e salva i risultati in una mesh poligonale.
 bool fractureCut(DiscreteFractureNetwork& fracture, Traces& trace)
 {
-    //double tol = 1e-10;
     // Prendo in esame una frattura alla volta
     for(unsigned int i = 0; i < fracture.numFracture; i++)
     {
@@ -792,7 +789,6 @@ bool fractureCut(DiscreteFractureNetwork& fracture, Traces& trace)
 bool createSubfracture(vector<Vector3d> subfracture, vector<Vector3d> cuttingTrace, vector<vector<Vector3d>>& subfractureVertices1)
 {
     unsigned int numVertices = subfracture.size();
-    //double tol = 1e-10;
     vector<Vector3d> Points;
     unsigned int n = 0;
     unsigned int pos1 = 0;
@@ -878,7 +874,6 @@ bool createSubfracture(vector<Vector3d> subfracture, vector<Vector3d> cuttingTra
 // Questa funzione estende le tracce non passanti
 vector<Vector3d> extendTraces(vector<Vector3d> subFractureVertices, vector<Vector3d> subTraceVertices)
 {
-    //double tol = 1e-10;
     Vector3d vec = subTraceVertices[1] - subTraceVertices[0];
     Vector3d point = subTraceVertices[0];
     vector<Vector3d> extendedVertices;
@@ -915,8 +910,6 @@ vector<Vector3d> extendTraces(vector<Vector3d> subFractureVertices, vector<Vecto
 // Questa funzione salva i risultati su una mesh
 bool createMesh(vector<pair<vector<Vector3d>, vector<pair<vector<Vector3d>, unsigned int>>>> subFracture, PolygonalMesh& mesh)
 {
-    //double tol = 1e-10;
-
     // Riservo lo spazio che mi può servire sovrastimandone la dimensione
     unsigned int dimension = subFracture.size();
     mesh.coordinates0D.reserve(3*dimension);
