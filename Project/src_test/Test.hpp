@@ -18,7 +18,6 @@ using namespace testing;
 
 //Test ReadFracture
 TEST(ReadFractureTest, FileNotFound)
-
 {
     DiscreteFractureNetwork fracture;
 
@@ -26,98 +25,94 @@ TEST(ReadFractureTest, FileNotFound)
 }
 
 
-//TEST(ReadFractureTest, ValidFileSFracture)
-//{
-//    string filePath = "DFN";
-//    string fileName = "/FR3_data.txt";
+TEST(ReadFractureTest, ValidFileSFracture)
+{
+    string filePath = "DFN";
+    string fileName = "/FR3_data.txt";
 
-//    DiscreteFractureNetwork fracture;
+    DiscreteFractureNetwork fracture;
 
-//    EXPECT_TRUE(ReadFracture(filePath, fileName, fracture));
-//    EXPECT_EQ(fracture.numFracture, 0);
-//    EXPECT_EQ(fracture.fractureID[0], 0);
-//    EXPECT_EQ(fracture.NumVertices[0], 4);
-//}
+    EXPECT_TRUE(ReadFracture(filePath, fileName, fracture));
 
+    EXPECT_EQ(fracture.numFracture, 3);
+    EXPECT_EQ(fracture.fractureID[0], 0);
+    EXPECT_EQ(fracture.NumVertices[0], 4);
+}
 
 
 //Test BoundingBox
 TEST(BBox3DTest, BoundingBoxCalculation)
 {
     MatrixXd vertices(3, 4);
-    vertices << 1, 2, 3, 4,
-                1, 2, 3, 4,
-                1, 2, 3, 4;
+    vertices << 0.0, 1.0, 1.0, 0.0,
+                0.0, 0.0, 1.0, 1.0,
+                0.0, 0.0, 0.0, 0.0;
 
-    BoundingBox bbox = BBox3D(vertices);
 
-    Vector3d expected_min(1, 1, 1);
-    Vector3d expected_max(4, 4, 4);
+    Vector3d expected_min(0.0, 0.0, 0.0);
+    Vector3d expected_max(1.0, 1.0, 0.0);
 
-    EXPECT_EQ(bbox.min, expected_min);
-    EXPECT_EQ(bbox.max, expected_max);
+    vector<Vector3d> bbox = BBox3D(vertices);
+
+    EXPECT_EQ(bbox[0], expected_min);
+    EXPECT_EQ(bbox[1], expected_max);
 }
 
 
 
 // Test FractureIntersection
-TEST(FractureIntersectionTest, TestSuccessfulIntersection)
+TEST(FractureIntersectionTest, IntersectingFractures)
 {
     DiscreteFractureNetwork fracture;
-    Traces trace;
-
     fracture.numFracture = 2;
     fracture.fractureID = {0, 1};
-    fracture.vertices.resize(8);
+
+    MatrixXd vertices1(3, 4);
+    vertices1 << 0, 1, 1, 0,
+                 0, 0, 1, 1,
+                 0, 0, 0, 0;
+
+    MatrixXd vertices2(3, 4);
+    vertices2 << 0.8, 0.8, 0.8, 0.8,
+                 0, 0, 1, 1,
+                -0.1, 0.3, 0.3, -0.1;
 
 
-    // Definisci i vertici della prima frattura
-    fracture.vertices[0] << 0, 0, 0;
-    fracture.vertices[1] << 1, 0, 0;
-    fracture.vertices[2] << 1, 1, 0;
-    fracture.vertices[3] << 0, 1, 0;
+    fracture.vertices = {vertices1, vertices2};
 
-    // Definisci i vertici della seconda frattura
-    fracture.vertices[4] << 0.8, 0, -0.1;
-    fracture.vertices[5] << 0.8, 0, 0.3;
-    fracture.vertices[6] << 0.8, 1, 0.3;
-    fracture.vertices[7] << 0.8, 1, -0.1;
+    Traces trace;
+    bool result = FractureIntersection(fracture, trace);
 
-
-    bool intersectionResult = FractureIntersection(fracture, trace);
-
-    EXPECT_EQ(true, intersectionResult);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(trace.numTraces, 1);
 }
 
-TEST(FractureIntersectionTest, TestNoIntersection)
+
+TEST(FractureIntersectionTest, NonIntersectingFractures)
 {
     DiscreteFractureNetwork fracture;
-    Traces trace;
-
     fracture.numFracture = 2;
     fracture.fractureID = {0, 1};
-    fracture.vertices.resize(8);
-
-    //Vertici della prima frattura
-    fracture.vertices[0] << 0, 0, 0;
-    fracture.vertices[1] << 1, 0, 0;
-    fracture.vertices[2] << 1, 1, 0;
-    fracture.vertices[3] << 0, 1, 0;
-
-    // Vertici della seconda frattura
-    fracture.vertices[4] << -0.2, 0.5, -0.3;
-    fracture.vertices[5] << 0.3, 0.5, -0.3;
-    fracture.vertices[6] << 0.3, 0.5, 0.4;
-    fracture.vertices[7] << -0.2, 0.5, 0.4;
 
 
-    bool intersectionResult = FractureIntersection(fracture, trace);
+    MatrixXd vertices1(3, 4);
+    vertices1 << 0, 1, 1, 0,
+                 0, 0, 1, 1,
+                 0, 0, 0, 0;
 
+    MatrixXd vertices2(3, 4);
+    vertices2 << -0.2, 0.3, 0.3, -0.2,
+                  0.5, 0.5, 0.5, 0.5,
+                 -0.3, -0.3, 0.4, 0.4;
 
-    EXPECT_EQ(false, intersectionResult);
+    fracture.vertices = {vertices1, vertices2};
 
+    Traces trace;
+    bool result = FractureIntersection(fracture, trace);
+
+    EXPECT_TRUE(result);
+    EXPECT_EQ(trace.numTraces, 0);
 }
-
 
 
 //Test FindTraces
@@ -409,6 +404,18 @@ TEST(ReorderingTest, SameSizeVectors)
     EXPECT_EQ(length[2], 3.0);
 }
 
+// *****************************************************************************************************************************************************
+
+//Test fractureCut
+
+
+//Test createSubfracture
+
+
+//Test extendTraces
+
+
+//Test createMesh
 
 
 
