@@ -7,6 +7,7 @@ using namespace std;
 using namespace Eigen;
 
 
+// Struttura per il salvataggio dei risultati in una mesh poligonale
 struct PolygonalMesh {
 
     // Cell0D

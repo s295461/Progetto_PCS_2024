@@ -6,7 +6,7 @@
 using namespace std;
 using namespace Eigen;
 
-
+// Struttura per memorizzare le fratture
 struct DiscreteFractureNetwork
 {
     unsigned int numFracture = 0;
@@ -15,7 +15,7 @@ struct DiscreteFractureNetwork
     vector<MatrixXd> vertices = {};
 };
 
-
+// Struttura per memorizzare le tracce
 struct Traces
 {
     unsigned int numTraces = 0;
