@@ -615,6 +615,9 @@ bool fractureCut(DiscreteFractureNetwork& fracture, Traces& trace)
         // Prendo una traccia alla volta
         for(unsigned int j = 0; j < trace.traceReordered[id].size(); j++)
         {
+            // if(j == 48)
+            //     int prova;
+
             // Prendo l'id della traccia che sto studiando
             tuple<unsigned int, bool, double> triplets = trace.traceReordered[id][j];
             unsigned int traceId = get<0>(triplets);
@@ -622,6 +625,10 @@ bool fractureCut(DiscreteFractureNetwork& fracture, Traces& trace)
             // Ciclo su tutti gli elementi di subFracture, quindi tutte le sottofratture che ho già creato
             for(unsigned int n = 0; n < subFracture.size(); n++)
             {
+                // if(n == 193)
+                //     int prova;
+
+
                 // Prendo le coordinate della sottofrattura da tagliare
                 vector<Vector3d> fractureCoord = get<0>(subFracture[n]);
                 // Verifico che la sottofrattura che sto considerando ha dei vertici
@@ -799,24 +806,20 @@ bool createSubfracture(vector<Vector3d> subfracture, vector<Vector3d> cuttingTra
     while(n < numVertices)
     {
         unsigned int k = (n + 1) % numVertices;
-        Vector3d P = subfracture[n];
-        Vector3d Q = subfracture[k];
-        Vector3d A = cuttingTrace[0];
-        Vector3d B = cuttingTrace[1];
-        Vector3d PQ = Q - P;
-        Vector3d PA = A - P;
-        Vector3d PB = B - P;
-        Points.push_back(P);
+        Vector3d subFracVec = subfracture[k] - subfracture[n];
+        Vector3d firstVert = cuttingTrace[0] - subfracture[n];
+        Vector3d secondVert = cuttingTrace[1] - subfracture[n];
+        Points.push_back(subfracture[n]);
         c++;
-        if((PQ.cross(PA)).norm() < tol)
+        if((subFracVec.cross(firstVert)).norm() < tol)
         {
-            Points.push_back(A);
+            Points.push_back(cuttingTrace[0]);
             pos1 = c;
             c++;
         }
-        else if((PQ.cross(PB)).norm() < tol)
+        else if((subFracVec.cross(secondVert)).norm() < tol)
         {
-            Points.push_back(B);
+            Points.push_back(cuttingTrace[1]);
             pos2 = c;
             c++;
         }
