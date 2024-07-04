@@ -284,7 +284,7 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
     vector<Vector3d> Point1;
     vector<Vector3d> Point2;
 
-    double tol = 1e-10;
+    double tol = 1e-12;
 
     // Nel ciclo while prendo ogni volta un segmento della prima e un segmento della seconda frattura
     while(n < fracture.NumVertices[Id1] && m < fracture.NumVertices[Id2])
@@ -443,7 +443,7 @@ bool PrintOnFile(const string fileName, const string filePath, Traces trace)
 bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
 
 {
-    double tol = 1e-10;
+    double tol = 1e-12;
     for(unsigned int i = 0; i < fracture.numFracture; i++)
     {
         vector<tuple<unsigned int, bool, double>> fractureTraces;
@@ -577,7 +577,7 @@ bool printTraces(const string fileName, const string filePath, Traces trace, Dis
 // Questa funzione effettua il taglio delle fratture in sottopoligoni e salva i risultati in una mesh poligonale.
 bool fractureCut(DiscreteFractureNetwork& fracture, Traces& trace)
 {
-    double tol = 1e-10;
+    double tol = 1e-12;
     // Prendo in esame una frattura alla volta
     for(unsigned int i = 0; i < fracture.numFracture; i++)
     {
@@ -614,6 +614,9 @@ bool fractureCut(DiscreteFractureNetwork& fracture, Traces& trace)
         // Prendo una traccia alla volta
         for(unsigned int j = 0; j < trace.traceReordered[id].size(); j++)
         {
+            // if(j == 48)
+            //     int prova;
+
             // Prendo l'id della traccia che sto studiando
             tuple<unsigned int, bool, double> triplets = trace.traceReordered[id][j];
             unsigned int traceId = get<0>(triplets);
@@ -621,6 +624,10 @@ bool fractureCut(DiscreteFractureNetwork& fracture, Traces& trace)
             // Ciclo su tutti gli elementi di subFracture, quindi tutte le sottofratture che ho già creato
             for(unsigned int n = 0; n < subFracture.size(); n++)
             {
+                // if(n == 193)
+                //     int prova;
+
+
                 // Prendo le coordinate della sottofrattura da tagliare
                 vector<Vector3d> fractureCoord = get<0>(subFracture[n]);
                 // Verifico che la sottofrattura che sto considerando ha dei vertici
@@ -787,7 +794,7 @@ bool fractureCut(DiscreteFractureNetwork& fracture, Traces& trace)
 bool createSubfracture(vector<Vector3d> subfracture, vector<Vector3d> cuttingTrace, vector<vector<Vector3d>>& subfractureVertices1)
 {
     unsigned int numVertices = subfracture.size();
-    double tol = 1e-10;
+    double tol = 1e-11;
     vector<Vector3d> Points;
     unsigned int n = 0;
     unsigned int pos1 = 0;
@@ -798,24 +805,20 @@ bool createSubfracture(vector<Vector3d> subfracture, vector<Vector3d> cuttingTra
     while(n < numVertices)
     {
         unsigned int k = (n + 1) % numVertices;
-        Vector3d P = subfracture[n];
-        Vector3d Q = subfracture[k];
-        Vector3d A = cuttingTrace[0];
-        Vector3d B = cuttingTrace[1];
-        Vector3d PQ = Q - P;
-        Vector3d PA = A - P;
-        Vector3d PB = B - P;
-        Points.push_back(P);
+        Vector3d subFracVec = subfracture[k] - subfracture[n];
+        Vector3d firstVert = cuttingTrace[0] - subfracture[n];
+        Vector3d secondVert = cuttingTrace[1] - subfracture[n];
+        Points.push_back(subfracture[n]);
         c++;
-        if((PQ.cross(PA)).norm() < tol)
+        if((subFracVec.cross(firstVert)).norm() < tol)
         {
-            Points.push_back(A);
+            Points.push_back(cuttingTrace[0]);
             pos1 = c;
             c++;
         }
-        else if((PQ.cross(PB)).norm() < tol)
+        else if((subFracVec.cross(secondVert)).norm() < tol)
         {
-            Points.push_back(B);
+            Points.push_back(cuttingTrace[1]);
             pos2 = c;
             c++;
         }
@@ -910,7 +913,7 @@ vector<Vector3d> extendTraces(vector<Vector3d> subFractureVertices, vector<Vecto
 // Questa funzione salva i risultati su una mesh
 bool createMesh(vector<pair<vector<Vector3d>, vector<pair<vector<Vector3d>, unsigned int>>>> subFracture, PolygonalMesh& mesh)
 {
-    double tol = 1e-10;
+    double tol = 1e-12;
 
     // Riservo lo spazio che mi può servire sovrastimandone la dimensione
     unsigned int dimension = subFracture.size();
