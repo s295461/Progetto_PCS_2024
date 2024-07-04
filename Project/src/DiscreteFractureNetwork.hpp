@@ -28,4 +28,12 @@ struct Traces
 };
 
 
+// tolleranze
+//constexpr double max_tol(const double& x, const double& y)
+//{
+//    return x > y ? x : y;
+//}
+
+//static constexpr double tol = 1.0e-12;
+
 
