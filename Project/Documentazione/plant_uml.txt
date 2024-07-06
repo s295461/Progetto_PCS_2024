@@ -22,29 +22,36 @@ package FractureNetwork <<Folder>> {
 package PolygonalMesh <<Folder>> {
 
     struct Cell0D {
-        + numCell: unsigned int  
-        + cellId: std::vector<unsigned int> 
-        + coordinates: std::vector<Vector3d>
+        + numCell0D: unsigned int  
+        + cellId0D: std::vector<unsigned int> 
+        + coordinates0D: std::vector<Vector3d>
     }
 
     struct Cell1D {
-        + numCell: unsigned int  
-        + cellId: std::vector<unsigned int> 
-        + verticesId: std::vector<Vector2i>
+        + numCell1D: unsigned int  
+        + cellId1D: std::vector<unsigned int> 
+        + verticesId1D: std::vector<Vector2i>
     }
 
     struct Cell2D {
-        + numCell: unsigned int 
-        + numVertices: std::vector<unsigned int> 
-        + numEdges: std::vector<unsigned int> 
-        + verticesId: std::vector<std::list<unsigned int>> 
-        + edgesId: std::vector<std::list<unsigned int>> 
+        + numCell2D: unsigned int 
+        + CellID2D: std:vector<unsigned int>
+        + numVertices2D: std::vector<unsigned int> 
+        + numEdges2D: std::vector<unsigned int> 
+        + verticesId2D: std::vector<std::list<unsigned int>> 
+        + edgesId2D: std::vector<std::list<unsigned int>> 
     }
 }
 
 package GeometryLibrary <<Folder>> {
+    
+    struct Segment {
+        + id1: int
+        + id2: int
+        + material: int
+   }
 
-    class Polygon {
+    struct Polygon {
         + VerticesCoordinates : MatrixXd
         + listVertices : std::vector<std::vector<unsigned int>>
         + Polygon()
@@ -59,15 +66,21 @@ package GeometryLibrary <<Folder>> {
         TestGedimInterface
     }
 
-    class Triangle {
+    struct Triangle {
         + Vertices : Matrix3d
         + Triangle(Vertices : Matrix3d)
         + double ComputeArea()
         .. TESTTRIANGLE ..
         TestComputeArea
     }
-
+    Segment -[hidden]-> Polygon
     Polygon "1" o-left- "many" Triangle : is made up of
+    
+    abstract class Functions{
+       + importPolygonsList(const std::string& filepath, GeometryLibrary::Polygons& polygon): void
+       + importSegments(const std::string& filePath, MatrixXd& points, MatrixXi& index_edges, VectorXi& materials): void
+    }
+   
 }
 
 package Gedim <<Frame>> {
@@ -77,5 +90,29 @@ Polygon::GedimInterface --right--> Gedim
 
 note "This is an external package" as GedimNote
 GedimNote .. Gedim
+
+package Utils <<Folder>>{
+  abstract class Functions{
+      + ImportFracture(const std::string fileNameInput, const std::string fileNameOutput, const std::string fileNameOutputReordered, const std::string filePathInput, const std::string filePathOutput, 
+         DiscreteFractureNetwork& fracture, Traces& trace): bool 
+      + clearDiscreteFractureNetwork(DiscreteFractureNetwork& fracture): void
+      + clearTraces(Traces& trace): void
+      + ReadFracture(const string& filePath, const string& fileName, DiscreteFractureNetwork& fracture): bool
+      + BBox3D(const MatrixXd& vertices): std::vector<Vector3d> 
+      + FractureIntersection(const DiscreteFractureNetwork fracture, Traces& trace): bool
+      + FindTraces(const Vector3d s, const Vector3d Point, const DiscreteFractureNetwork& fracture, unsigned int Id1, unsigned int Id2, Traces& trace): bool;
+      + SaveTraces(double n, double m, Vector3d point, Vector3d s, Traces& trace, unsigned int Id1, unsigned int Id2): void
+      + PrintOnFile(const std::string fileName, const std::string filePath, Traces trace): bool
+      + TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace): bool
+      + reordering(std::vector<unsigned int>& idTraces, std::vector<double>& length): bool
+      + printTraces(const std::string fileName, const std::string filePath, Traces trace, DiscreteFractureNetwork fracture): bool
+      + fractureCut(DiscreteFractureNetwork& fracture, Traces& trace): bool
+      + createSubfracture(std::vector<Vector3d> subfracture, std::vector<Vector3d> cuttingTrace, std::vector<vector<Vector3d>>& subfractureVertices): bool
+      + extendTraces(vector<Vector3d> subFractureVertices, vector<Vector3d> subTraceVertices): std::vector<Vector3d>
+      + createMesh(std::vector<std::pair<std::vector<Vector3d>, std::vector<std::pair<std::vector<Vector3d>, unsigned int>>>> subFracture, PolygonalMesh& mesh): bool
+  }
+}
+FractureNetwork -[hidden]-> GeometryLibrary
+FractureNetwork -[hidden]-> PolygonalMesh
 
 @enduml

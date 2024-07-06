@@ -4,7 +4,8 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
-#include <UCDUtilities.hpp>
+#include "C:\Users\davep\OneDrive\Desktop\Progetto_PCS_2024\Project\src_paraview\UCDUtilities.hpp"
+#include <DiscreteFractureNetwork.hpp>
 #include <Eigen/Eigen>
 
 using namespace Eigen;
@@ -50,9 +51,15 @@ struct Polygons{
 
 };
 
+struct Segment {
+    int id1;
+    int id2;
+    int material;
+};
+
 void importPolygonsList(const string& filepath,
                         Polygons& polygons);
-
+void importSegments(const std::string& filePath, MatrixXd& points, MatrixXi& index_edges, VectorXi& materials);
 }
 
 
