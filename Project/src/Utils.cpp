@@ -44,7 +44,7 @@ bool ImportFracture(const string fileNameInput, const string fileNameOutput, con
     // Chiamo la funzione che stampa le tracce riordinate
     if(!printTraces(fileNameOutputReordered, filePathOutput, trace, fracture))
     {
-        cerr << "Something vrong printing the traces reordered" << endl;
+        cerr << "Something wrong printing the traces reordered" << endl;
         return false;
     }
     return true;
