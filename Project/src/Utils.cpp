@@ -189,7 +189,7 @@ vector<Vector3d> BBox3D(const MatrixXd& vertices)
     vector<Vector3d> bbox(2);
     //Inizializzato a valori infinitamente grandi positivi e negativi
     bbox[0] = Vector3d::Constant(numeric_limits<double>::infinity());
-    bbox[1] = Vector3d::Constant(numeric_limits<double>::infinity());
+    bbox[1] = Vector3d::Constant(-numeric_limits<double>::infinity());
     //Aggiorna quando trova un nuovo massimo o minimo elemento per elemento
     for (int i = 0; i < vertices.cols(); ++i) {
         bbox[0] = bbox[0].cwiseMin(vertices.col(i));
@@ -324,11 +324,11 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
             Vector3d verify2 = P2 + u2 * v2;
 
             // Se il punto di intersezione coincide con il punto di verifica, allora è corretto
-            if((intersection1 - verify1).norm() < tol*max(intersection1.norm(), verify1.norm()) && u1 >= 0 && u1 <= 1)
+            if((intersection1 - verify1).norm() < tol * max(intersection1.norm(), verify1.norm()) && u1 >= 0 && u1 <= 1)
 
                 Point1.push_back(intersection1);
 
-            if((intersection2 - verify2).norm() < tol*max(intersection2.norm(), verify2.norm()) && u2 >= 0 && u2 <= 1)
+            if((intersection2 - verify2).norm() < tol * max(intersection2.norm(), verify2.norm()) && u2 >= 0 && u2 <= 1)
                 Point2.push_back(intersection2);
         }
 
@@ -349,6 +349,7 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
         double b = ((intersectionPoints[1] - point).dot(s)) / (s.norm() * s.norm());
         double c = ((intersectionPoints[2] - point).dot(s)) / (s.norm() * s.norm());
         double d = ((intersectionPoints[3] - point).dot(s)) / (s.norm() * s.norm());
+
 
         // Confronto le posizioni relative dei punti per capire come sono posizionati e quali sono i due estremi della traccia
         // Innanzitutto riordino le posizioni rispetto alla frattura, in modo da avere a prima di b e c prima di d
@@ -377,25 +378,25 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
         else if(a > c && a < b && b < d)
             SaveTraces(a, b, point, s, trace, Id1, Id2);
         // In questo caso a e c coincidono e b e d coincidono, dunque i due segmenti sono sovrapposti e la traccia è formata da una delle due coppie
-        else if(fabs((a - c)) <= tol*max(fabs(a), fabs(c)) && fabs((b - d)) <= tol*max(fabs(b), fabs(d)))
+        else if(fabs((a - c)) <= tol * max(fabs(a), fabs(c)) && fabs((b - d)) <= tol*max(fabs(b), fabs(d)))
             SaveTraces(a, b, point, s, trace, Id1, Id2);
         // In questo caso a e c coincidono mentre d si trova dopo b, dunque la traccia è formata da a e b
-        else if(fabs((a - c)) <= tol*max(fabs(a), fabs(c)) && b < d)
+        else if(fabs((a - c)) <= tol * max(fabs(a), fabs(c)) && b < d)
             SaveTraces(a, b, point, s, trace, Id1, Id2);
         // In questo caso a e c coincidono mentre b si trova dopo d, dunque la traccia è formata da c e d
-        else if(fabs((a - c)) <= tol*max(fabs(a), fabs(c)) && d < b)
+        else if(fabs((a - c)) <= tol * max(fabs(a), fabs(c)) && d < b)
             SaveTraces(c, d, point, s, trace, Id1, Id2);
         // In questo caso b e d coincidono mentre a si trova dopo c, dunque la traccia è formata da a e b
-        else if(fabs((b - d)) <= tol*max(fabs(b), fabs(d)) && c < a)
+        else if(fabs((b - d)) <= tol * max(fabs(b), fabs(d)) && c < a)
             SaveTraces(a, b, point, s, trace, Id1, Id2);
         // In questo caso b e d coincidono menyte c si trova dopo a, dunque la traccia è formata da c e d
-        else if(fabs((b - d)) <= tol*max(fabs(b), fabs(d)) && a < c)
+        else if(fabs((b - d)) <= tol * max(fabs(b), fabs(d)) && a < c)
             SaveTraces(c, d, point, s, trace, Id1, Id2);
     }
     return true;
 }
 
-  
+
 // Con questa funzione salvo tutti i valori legati ad una traccia nella struttura Traces.
 void SaveTraces(double n, double m, Vector3d point, Vector3d s, Traces& trace, unsigned int Id1, unsigned int Id2)
 {
