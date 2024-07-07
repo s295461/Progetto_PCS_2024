@@ -339,12 +339,14 @@ TEST(TraceReorderTest, TestTraceReorder)
         vector<tuple<unsigned int, bool, double>>& reorderedTraces = trace.traceReordered[i];
         EXPECT_EQ(reorderedTraces.size(), 2);
 
-        // Check passing and not passing counts
+
         int countPassing = 0;
         int countNotPassing = 0;
-        for (const auto& reorderedTrace : reorderedTraces) { // Rinominato in reorderedTrace
+        for (const auto& reorderedTrace : reorderedTraces)
+        {
             if (get<1>(reorderedTrace) == false)
                 countPassing++;
+
             else if (get<1>(reorderedTrace) == true)
                 countNotPassing++;
         }
