@@ -89,15 +89,22 @@ TEST(FractureIntersectionTest, IntersectingFractures)
    EXPECT_EQ(trace.fractureId[0][0] , 0);
    EXPECT_EQ(trace.fractureId[0][1] , 1);
    EXPECT_EQ(trace.coordinates.size(), 1);
+
 }
 
 
 TEST(FractureIntersectionTest, NonIntersectingFractures)
 {
+
    DiscreteFractureNetwork fracture;
    fracture.numFracture = 2;
    fracture.fractureID = {0, 1};
    fracture.NumVertices = {4,4};
+
+    MatrixXd vertices1(3, 4);
+    vertices1 << 0.8, 0.8, 0.8, 0.8,
+        0, 0, 1, 1,
+        -0.1, 0.3, 0.3, -0.1;
 
 
    MatrixXd vertices1(3, 4);
@@ -117,6 +124,7 @@ TEST(FractureIntersectionTest, NonIntersectingFractures)
 
    EXPECT_TRUE(result);
    EXPECT_EQ(trace.numTraces, 0);
+
 }
 
 
@@ -137,6 +145,7 @@ TEST(FindTracesTest, Intersection)
     fracture.vertices[0] << 0, 1, 1, 0,
         0, 0, 1, 1,
         0, 0, 0, 0;
+
 
     fracture.vertices[1].resize(3, 4);
     fracture.vertices[1] << -0.2378, 0.3162, 0.3162,-0.2378,

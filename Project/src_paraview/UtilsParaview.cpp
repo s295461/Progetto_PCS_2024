@@ -88,7 +88,7 @@ void importPolygonsList(const string& filepath, Polygons &polygons)
 
     string line;
 
-    // Legge e ignora l'header del file
+    // Legge e ignora le prime due righe
     getline(file, line);
     getline(file, line);
 
@@ -166,7 +166,7 @@ void importSegments(const string& filePath, MatrixXd& points, MatrixXi& index_ed
     // Legge i segmenti dal file
     while (getline(file, line)) {
         lineNumber++;
-        //Salta le linee vuote e quelle che iniziano per #
+        // Salta le righe vuote o che iniziano per # (scelto opportunamente)
         if (line.empty() || line[0] == '#')
             continue;
 
