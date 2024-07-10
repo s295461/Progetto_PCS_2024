@@ -19,28 +19,26 @@ package FractureNetwork <<Folder>> {
     }
 }
 
-package PolygonalMesh <<Folder>> {
+struct PolygonalMesh  {
 
-    struct Cell0D {
+        Cell 0D
         + numCell0D: unsigned int  
         + cellId0D: std::vector<unsigned int> 
         + coordinates0D: std::vector<Vector3d>
-    }
-
-    struct Cell1D {
+  
+        Cell 1D
         + numCell1D: unsigned int  
         + cellId1D: std::vector<unsigned int> 
         + verticesId1D: std::vector<Vector2i>
-    }
-
-    struct Cell2D {
+        
+        Cell 2D
         + numCell2D: unsigned int 
         + CellID2D: std:vector<unsigned int>
         + numVertices2D: std::vector<unsigned int> 
         + numEdges2D: std::vector<unsigned int> 
         + verticesId2D: std::vector<std::list<unsigned int>> 
         + edgesId2D: std::vector<std::list<unsigned int>> 
-    }
+    
 }
 
 package GeometryLibrary <<Folder>> {
@@ -91,8 +89,8 @@ Polygon::GedimInterface --right--> Gedim
 note "This is an external package" as GedimNote
 GedimNote .. Gedim
 
-package Utils <<Folder>>{
-  abstract class Functions{
+
+abstract class Functions{
       + ImportFracture(const std::string fileNameInput, const std::string fileNameOutput, const std::string fileNameOutputReordered, const std::string filePathInput, const std::string filePathOutput, 
          DiscreteFractureNetwork& fracture, Traces& trace): bool 
       + clearDiscreteFractureNetwork(DiscreteFractureNetwork& fracture): void
@@ -109,10 +107,8 @@ package Utils <<Folder>>{
       + fractureCut(DiscreteFractureNetwork& fracture, Traces& trace): bool
       + createSubfracture(std::vector<Vector3d> subfracture, std::vector<Vector3d> cuttingTrace, std::vector<vector<Vector3d>>& subfractureVertices): bool
       + extendTraces(vector<Vector3d> subFractureVertices, vector<Vector3d> subTraceVertices): std::vector<Vector3d>
-      + createMesh(std::vector<std::pair<std::vector<Vector3d>, std::vector<std::pair<std::vector<Vector3d>, unsigned int>>>> subFracture, PolygonalMesh& mesh): bool
-  }
+      + createMesh(std::vector<std::pair<std::vector<Vector3d>, std::vector<std::pair<std::vector<Vector3d>, unsigned int>>>> subFracture, PolygonalMesh& mesh): bool 
 }
 FractureNetwork -[hidden]-> GeometryLibrary
 FractureNetwork -[hidden]-> PolygonalMesh
-
 @enduml
