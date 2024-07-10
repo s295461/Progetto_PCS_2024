@@ -166,7 +166,7 @@ void importSegments(const string& filePath, MatrixXd& points, MatrixXi& index_ed
     // Legge i segmenti dal file
     while (getline(file, line)) {
         lineNumber++;
-        // Salta le righe vuote o i commenti
+        //Salta le linee vuote e quelle che iniziano per #
         if (line.empty() || line[0] == '#')
             continue;
 
