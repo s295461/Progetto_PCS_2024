@@ -1441,10 +1441,10 @@
 # FractureId; NumTraces
 360; 1
 # TraceId; Tips; Length
-0; 1; 99.5153
+0; 1; 96.3458
 
 # FractureId; NumTraces
 361; 1
 # TraceId; Tips; Length
-0; 1; 99.5153
+0; 1; 96.3458
 
