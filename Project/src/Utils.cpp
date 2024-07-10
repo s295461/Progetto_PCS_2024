@@ -306,7 +306,7 @@ bool FindTraces(const Vector3d s, const Vector3d point, const DiscreteFractureNe
         P2 = fracture.vertices[Id2].col(h);
 
         // Verifico che le rette non siano parallele alla retta di intersezione tra i piani
-        if((v1.cross(s)).norm() > tol || (v2.cross(s)).norm() > tol)
+        if((v1.cross(s)).norm() > tol*max(v1.norm(), s.norm()) || (v2.cross(s)).norm() > tol*max(v2.norm(), s.norm()))
         {
             double t1;
             double u1;
@@ -479,7 +479,7 @@ bool TraceReorder(DiscreteFractureNetwork& fracture, Traces& trace)
                     // PB è il segmento formato dal vertice della frattura con l'altro vertice della traccia.
                     Vector3d PB = fracture.vertices[i].col(n) - trace.coordinates[position].col(1);
                     // Se il prodotto vettoriale tra PQ e PA oppure tra PQ e PB è zero, allora A o B appartengono al segmento PQ, dunque incremento di uno il contatore.
-                    if((PQ.cross(PA)).norm() < tol || (PQ.cross(PB)).norm() < tol)
+                    if((PQ.cross(PA)).norm() < tol*max(PQ.norm(), PA.norm()) || (PQ.cross(PB)).norm() < tol*max(PQ.norm(), PB.norm()))
                         counter++;
                     n++;
                 }
@@ -835,13 +835,13 @@ bool createSubfracture(vector<Vector3d> subfracture, vector<Vector3d> cuttingTra
         c++;
         // Se il prodotto vettoriale tra il vettore del lato della frattura e il vettore ad un estremo della traccia è 0, allora questo estremo
         // della traccia si trova sul lato della frattura, dunque lo salvo in Points e memorizzo la sua posizione all'interno di quest'ultimo
-        if((subFracVec.cross(firstVert)).norm() < tol)
+        if((subFracVec.cross(firstVert)).norm() < tol*max(subFracVec.norm(), firstVert.norm()))
         {
             Points.push_back(cuttingTrace[0]);
             pos1 = c;
             c++;
         }
-        else if((subFracVec.cross(secondVert)).norm() < tol)
+        else if((subFracVec.cross(secondVert)).norm() < tol*max(subFracVec.norm(), secondVert.norm()))
         {
             Points.push_back(cuttingTrace[1]);
             pos2 = c;
@@ -921,7 +921,7 @@ vector<Vector3d> extendTraces(vector<Vector3d> subFractureVertices, vector<Vecto
         Vector3d point1 = subFractureVertices[i];
         // Verifico che la traccia da estendere e il lato della sottofrattura che sto considerando non siano paralleli, se lo fossero passo direttamente
         // al lato successivo della sottofrattura
-        if((vec1.cross(vec)).norm() > tol)
+        if((vec1.cross(vec)).norm() > tol*max(vec1.norm(), vec.norm()))
         {
             double t;
             double u;
@@ -933,7 +933,7 @@ vector<Vector3d> extendTraces(vector<Vector3d> subFractureVertices, vector<Vecto
             Vector3d verify = point1 + u * vec1;
 
             // Se il punto di intersezione coincide con il punto di verifica e u è compreso tra 0 e 1, allora il punto è corretto e si trova sul lato della sottofrattura
-            if((intersection - verify).norm() < tol && u >= 0 && u <= 1)
+            if((intersection - verify).norm() < tol*max(intersection.norm(), verify.norm()) && u >= 0 && u <= 1)
             {
                 // Inserisco questo punto come estremo della traccia estesa
                 extendedVertices.push_back(intersection);
@@ -1021,7 +1021,7 @@ bool createMesh(vector<pair<vector<Vector3d>, vector<pair<vector<Vector3d>, unsi
                 Vector3d vec1 = mesh.coordinates0D[id1] - mesh.coordinates0D[firstId];
                 Vector3d vec2 = mesh.coordinates0D[id1] - mesh.coordinates0D[secondId];
                 // Se il punto id1 si trova sul segmento, elimino il segmento e lo sostituisco con i due sotto-segmenti formati dal punto id1
-                if((vec.cross(vec1)).norm() < tol && vec.dot(vec1) > tol && (-vec).dot(vec2) > tol)
+                if((vec.cross(vec1)).norm() < tol*max(vec.norm(), vec1.norm()) && vec.dot(vec1) > 0 && (-vec).dot(vec2) > 0)
                 {
                     auto it = remove(mesh.verticesId1D.begin(), mesh.verticesId1D.end(), mesh.verticesId1D[p]);
                     mesh.verticesId1D.erase(it, mesh.verticesId1D.end());
