@@ -106,12 +106,6 @@ TEST(FractureIntersectionTest, NonIntersectingFractures)
         0, 0, 1, 1,
         -0.1, 0.3, 0.3, -0.1;
 
-
-   MatrixXd vertices1(3, 4);
-   vertices1 << 0.8, 0.8, 0.8, 0.8,
-       0, 0, 1, 1,
-       -0.1, 0.3, 0.3, -0.1;
-
    MatrixXd vertices2(3, 4);
    vertices2 << -0.2, 0.3, 0.3, -0.2,
                  0.5, 0.5, 0.5, 0.5,
