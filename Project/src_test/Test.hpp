@@ -61,61 +61,61 @@ TEST(BBox3DTest, BoundingBoxCalculation)
 
 
 // Test FractureIntersection
-//TEST(FractureIntersectionTest, IntersectingFractures)
-//{
-//    DiscreteFractureNetwork fracture;
+TEST(FractureIntersectionTest, IntersectingFractures)
+{
+    DiscreteFractureNetwork fracture;
 
-//    fracture.numFracture = 2;
-//    fracture.fractureID = {0, 1};
+    fracture.numFracture = 2;
+    fracture.fractureID = {0, 1};
+    fracture.NumVertices = {4, 4};
 
-//    MatrixXd vertices1(3, 4);
-//    vertices1 << 0, 1, 1, 0,
-//        0, 0, 1, 1,
-//        0, 0, 0, 0;
-//    MatrixXd vertices2(3, 4);
-//    vertices2 << 0.8, 0.8, 0.8, 0.8,
-//                 0, 0, 1, 1,
-//                -0.1, 0.3, 0.3, -0.1;
+    MatrixXd vertices1(3, 4);
+    vertices1 << 0, 1, 1, 0,
+        0, 0, 1, 1,
+        0, 0, 0, 0;
+    MatrixXd vertices2(3, 4);
+    vertices2 << -0.2378, 0.3162, 0.3162, -0.2378,
+        0.5, 0.5, 0.5, 0.5,
+        -0.3444, -0.3444, 0.4528, 0.4528;
 
-//    fracture.vertices = {vertices1, vertices2};
+    fracture.vertices = {vertices1, vertices2};
 
-//    Traces trace;
-//    bool result = FractureIntersection(fracture, trace);
+    Traces trace;
+    bool result = FractureIntersection(fracture, trace);
 
-//    EXPECT_TRUE(result);
-//    EXPECT_EQ(trace.numTraces, 1);
-//    EXPECT_EQ(trace.fractureId.size(), 1);
-//    EXPECT_EQ(trace.fractureId , 0);
-//    EXPECT_EQ(trace.fractureId , 1);
-//    EXPECT_EQ(trace.coordinates.size(), 1);
-//}
-
-
-//TEST(FractureIntersectionTest, NonIntersectingFractures)
-//{
-//    DiscreteFractureNetwork fracture;
-//    fracture.numFracture = 2;
-//    fracture.fractureID = {0, 1};
+    EXPECT_TRUE(result);
+    EXPECT_EQ(trace.numTraces, 1);
+    EXPECT_EQ(trace.fractureId.size(), 1);
+    EXPECT_EQ(trace.fractureId[0][0] , 0);
+    EXPECT_EQ(trace.fractureId[0][1] , 1);
+    EXPECT_EQ(trace.coordinates.size(), 1);
+}
 
 
-//    MatrixXd vertices1(3, 4);
-//    vertices1 << 0, 1, 1, 0,
-//                 0, 0, 1, 1,
-//                 0, 0, 0, 0;
+TEST(FractureIntersectionTest, NonIntersectingFractures)
+{
+    DiscreteFractureNetwork fracture;
+    fracture.numFracture = 2;
+    fracture.fractureID = {0, 1};
+    fracture.NumVertices = {4, 4};
 
-//    MatrixXd vertices2(3, 4);
-//    vertices2 << -0.2, 0.3, 0.3, -0.2,
-//                  0.5, 0.5, 0.5, 0.5,
-//                 -0.3, -0.3, 0.4, 0.4;
+    MatrixXd vertices1(3, 4);
+    vertices1 << 0.8, 0.8, 0.8, 0.8,
+        0, 0, 1, 1,
+        -0.1, 0.3, 0.3, -0.1;
 
-//    fracture.vertices = {vertices1, vertices2};
+    MatrixXd vertices2(3, 4);
+    vertices2 << -0.2, 0.3, 0.3, -0.2,
+                  0.5, 0.5, 0.5, 0.5,
+                 -0.3, -0.3, 0.4, 0.4;
+    fracture.vertices = {vertices1, vertices2};
 
-//    Traces trace;
-//    bool result = FractureIntersection(fracture, trace);
+    Traces trace;
+    bool result = FractureIntersection(fracture, trace);
 
-//    EXPECT_TRUE(result);
-//    EXPECT_EQ(trace.numTraces, 0);
-//}
+    EXPECT_TRUE(result);
+    EXPECT_EQ(trace.numTraces, 0);
+}
 
 
 //Test FindTraces
@@ -124,37 +124,30 @@ TEST(FindTracesTest, Intersection)
     DiscreteFractureNetwork fracture;
     Traces trace;
 
-    fracture.numFracture = 3;
-    fracture.fractureID = {0, 1, 2};
-    fracture.NumVertices = {4, 4, 4};
 
-    fracture.vertices.resize(3);
+    fracture.numFracture = 2;
+    fracture.fractureID = {0, 1};
+    fracture.NumVertices = {4, 4};
 
+    fracture.vertices.resize(2);
 
 
     fracture.vertices[0].resize(3, 4);
-    fracture.vertices[0] << 1.5, 2.5, 2.5, 1.5,
+    fracture.vertices[0] << 0, 1, 1, 0,
         0, 0, 1, 1,
         0, 0, 0, 0;
 
 
-
     fracture.vertices[1].resize(3, 4);
-    fracture.vertices[1] << 0.8, 0.8, 0.8, 0.8,
-        0, 0, 1, 1,
-        -0.1, 0.3, 0.3, -0.1;
+    fracture.vertices[1] << -0.2378, 0.3162, 0.3162, -0.2378,
+        0.5, 0.5, 0.5, 0.5,
+        -0.3444, -0.3444, 0.4528, 0.4528;
 
 
+    Vector3d s(0.4035, 0, 0);
+    Vector3d point(0, 0.5, 0);
 
-    fracture.vertices[2].resize(3, 4);
-    fracture.vertices[2] << 2, 3, 3, 2,
-        0, 0, 1, 1,
-        -0.2, 0.4, 0.4, -0.2;
-
-    Vector3d s(0, 1, 0);
-    Vector3d point(2.33, 0, 0);
-
-    bool result = FindTraces(s, point, fracture, 0, 2, trace);
+    bool result = FindTraces(s, point, fracture, 0, 1, trace);
 
     EXPECT_TRUE(result);
     EXPECT_EQ(trace.numTraces, 1);
